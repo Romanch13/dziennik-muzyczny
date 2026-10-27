@@ -29,17 +29,47 @@ import {
   PlusCircle,
   X
 } from 'lucide-react';
+import initialDatabaseJson from './data/initialData.json';
+
+// SHA-256 helper for client-side password validation in offline / GitHub Pages mode
+async function sha256Hex(text: string): Promise<string> {
+  const enc = new TextEncoder().encode(text.trim());
+  const hash = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(hash))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+// Safely retrieve cached data or bundled default database
+function getStoredOrInitialDatabase(): WorkshopDatabase {
+  try {
+    const saved = localStorage.getItem('wm_journal_database');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && Array.isArray(parsed.months) && parsed.months.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to parse cached database from localStorage:', err);
+  }
+  return initialDatabaseJson as unknown as WorkshopDatabase;
+}
 
 export default function App() {
-  const [data, setData] = useState<WorkshopDatabase | null>(null);
-  const [activeMonthId, setActiveMonthId] = useState<string>('pazdziernik-2026');
+  const [data, setData] = useState<WorkshopDatabase>(getStoredOrInitialDatabase);
+  const [activeMonthId, setActiveMonthId] = useState<string>(() => {
+    const init = getStoredOrInitialDatabase();
+    return init.months?.[0]?.id || 'pazdziernik-2026';
+  });
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isRealtimeConnected, setIsRealtimeConnected] = useState<boolean>(false);
+  const [isBackendOnline, setIsBackendOnline] = useState<boolean>(false);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('wm_theme');
     return saved === 'dark' ? 'dark' : 'light';
@@ -98,19 +128,30 @@ export default function App() {
     dayOfWeek: string;
   } | null>(null);
 
-  // 1. Initial Load
+  // 1. Fetch journal from backend if available, fallback smoothly to local cached state
   const fetchJournal = useCallback(async () => {
     try {
       const res = await fetch('/api/journal');
-      if (res.ok) {
+      const contentType = res.headers.get('content-type') || '';
+      if (res.ok && contentType.includes('application/json')) {
         const json: WorkshopDatabase = await res.json();
-        setData(json);
-        if (json.months?.length > 0 && !activeMonthId) {
-          setActiveMonthId(json.months[0].id);
+        if (json && Array.isArray(json.months)) {
+          setData(json);
+          setIsBackendOnline(true);
+          try {
+            localStorage.setItem('wm_journal_database', JSON.stringify(json));
+          } catch {
+            // ignore
+          }
+          if (json.months.length > 0 && !activeMonthId) {
+            setActiveMonthId(json.months[0].id);
+          }
+          return;
         }
       }
-    } catch (err) {
-      console.error('Error fetching journal:', err);
+      setIsBackendOnline(false);
+    } catch {
+      setIsBackendOnline(false);
     } finally {
       setIsLoading(false);
     }
@@ -120,55 +161,77 @@ export default function App() {
   useEffect(() => {
     const savedToken = localStorage.getItem('wm_auth_token');
     if (savedToken) {
-      fetch('/api/auth/status', {
-        headers: { Authorization: `Bearer ${savedToken}` }
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          if (json.isAuthenticated) {
+      if (savedToken.startsWith('local-auth-')) {
+        setIsAuthenticated(true);
+        setToken(savedToken);
+      } else {
+        fetch('/api/auth/status', {
+          headers: { Authorization: `Bearer ${savedToken}` }
+        })
+          .then((res) => {
+            const ct = res.headers.get('content-type') || '';
+            if (res.ok && ct.includes('application/json')) {
+              return res.json();
+            }
+            throw new Error('Static host');
+          })
+          .then((json) => {
+            if (json.isAuthenticated) {
+              setIsAuthenticated(true);
+              setToken(savedToken);
+            } else {
+              localStorage.removeItem('wm_auth_token');
+            }
+          })
+          .catch(() => {
+            // Static host fallback: allow persistent session if token exists
             setIsAuthenticated(true);
             setToken(savedToken);
-          } else {
-            localStorage.removeItem('wm_auth_token');
-          }
-        })
-        .catch(() => {
-          localStorage.removeItem('wm_auth_token');
-        });
+          });
+      }
     }
 
     fetchJournal();
   }, [fetchJournal]);
 
-  // 2. Real-time sync via Server-Sent Events (SSE)
+  // 2. Real-time sync via Server-Sent Events (SSE) only when backend is active
   useEffect(() => {
-    const eventSource = new EventSource('/api/journal/events');
+    if (!isBackendOnline) return;
 
-    eventSource.onopen = () => {
-      setIsRealtimeConnected(true);
-    };
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource('/api/journal/events');
 
-    eventSource.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data);
-        if (payload.type === 'journal_updated' || payload.type === 'journal_reset') {
-          fetchJournal();
-        } else if (payload.type === 'month_updated') {
-          fetchJournal();
+      eventSource.onopen = () => {
+        setIsRealtimeConnected(true);
+      };
+
+      eventSource.onmessage = (event) => {
+        try {
+          const payload = JSON.parse(event.data);
+          if (payload.type === 'journal_updated' || payload.type === 'journal_reset') {
+            fetchJournal();
+          } else if (payload.type === 'month_updated') {
+            fetchJournal();
+          }
+        } catch (err) {
+          console.error('SSE parsing error:', err);
         }
-      } catch (err) {
-        console.error('SSE parsing error:', err);
-      }
-    };
+      };
 
-    eventSource.onerror = () => {
+      eventSource.onerror = () => {
+        setIsRealtimeConnected(false);
+      };
+    } catch {
       setIsRealtimeConnected(false);
-    };
+    }
 
     return () => {
-      eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
     };
-  }, [fetchJournal]);
+  }, [isBackendOnline, fetchJournal]);
 
   // Active month object
   const activeMonth = useMemo(() => {
@@ -207,27 +270,44 @@ export default function App() {
     return Array.from(studentsSet).sort();
   }, [data]);
 
-  // Save changes to backend
-  const saveMonthToBackend = async (updatedMonth: MonthData) => {
+  // Helper to persist database to local state and localStorage
+  const persistDatabase = useCallback((newData: WorkshopDatabase) => {
+    setData(newData);
+    try {
+      localStorage.setItem('wm_journal_database', JSON.stringify(newData));
+    } catch (err) {
+      console.warn('LocalStorage save failed:', err);
+    }
+  }, []);
+
+  // Save changes to backend or localStorage
+  const saveMonthToBackend = async (updatedMonth: MonthData, updatedDb?: WorkshopDatabase) => {
     if (!token || !isAuthenticated) return;
     setIsSaving(true);
-    try {
-      const res = await fetch(`/api/journal/month/${updatedMonth.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(updatedMonth)
-      });
-      if (res.ok) {
-        setLastSaved(new Date().toLocaleTimeString('pl-PL'));
-      }
-    } catch (err) {
-      console.error('Save error:', err);
-    } finally {
-      setIsSaving(false);
+    setLastSaved(new Date().toLocaleTimeString('pl-PL'));
+
+    if (updatedDb) {
+      persistDatabase(updatedDb);
     }
+
+    if (isBackendOnline) {
+      try {
+        const res = await fetch(`/api/journal/month/${updatedMonth.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(updatedMonth)
+        });
+        if (res.ok) {
+          setLastSaved(new Date().toLocaleTimeString('pl-PL'));
+        }
+      } catch (err) {
+        console.warn('Backend save error:', err);
+      }
+    }
+    setIsSaving(false);
   };
 
   // Update a single month locally and trigger save
@@ -241,12 +321,13 @@ export default function App() {
       m.id === recalculated.id ? recalculated : m
     );
 
-    setData({
+    const updatedDb: WorkshopDatabase = {
       ...data,
       months: updatedMonths
-    });
+    };
 
-    saveMonthToBackend(recalculated);
+    persistDatabase(updatedDb);
+    saveMonthToBackend(recalculated, updatedDb);
   };
 
   // Lesson actions
@@ -466,29 +547,52 @@ export default function App() {
 
   // Auth operations
   const handleLogin = async (password: string): Promise<boolean> => {
+    const trimmed = password.trim();
+    if (!trimmed) return false;
+
+    if (isBackendOnline) {
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: trimmed })
+        });
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
+          const json = await res.json();
+          setIsAuthenticated(true);
+          setToken(json.token);
+          localStorage.setItem('wm_auth_token', json.token);
+          return true;
+        }
+      } catch (err) {
+        console.warn('Backend login attempt failed, checking local credentials:', err);
+      }
+    }
+
+    // Static / client-side check (e.g. GitHub Pages or offline)
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      });
-      if (res.ok) {
-        const json = await res.json();
+      const inputHash = await sha256Hex(trimmed);
+      const customHash = localStorage.getItem('wm_password_hash');
+      const defaultHash = await sha256Hex('jagodno2026');
+      const expectedHash = customHash || defaultHash;
+
+      if (inputHash === expectedHash) {
+        const localToken = 'local-auth-' + Math.random().toString(36).substring(2) + '-' + Date.now().toString(36);
         setIsAuthenticated(true);
-        setToken(json.token);
-        localStorage.setItem('wm_auth_token', json.token);
+        setToken(localToken);
+        localStorage.setItem('wm_auth_token', localToken);
         return true;
       }
-      return false;
     } catch (err) {
-      console.error('Login error:', err);
-      return false;
+      console.error('Local auth check error:', err);
     }
+    return false;
   };
 
   const handleLogout = async () => {
     try {
-      if (token) {
+      if (token && isBackendOnline) {
         await fetch('/api/auth/logout', {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` }
@@ -505,33 +609,46 @@ export default function App() {
 
   const handleChangePassword = async (newPassword: string): Promise<boolean> => {
     if (!token) return false;
-    try {
-      const res = await fetch('/api/settings/password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ newPassword })
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json.token) {
-          setToken(json.token);
-          localStorage.setItem('wm_auth_token', json.token);
+    const trimmed = newPassword.trim();
+    if (!trimmed) return false;
+
+    if (isBackendOnline) {
+      try {
+        const res = await fetch('/api/settings/password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ newPassword: trimmed })
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.token) {
+            setToken(json.token);
+            localStorage.setItem('wm_auth_token', json.token);
+          }
         }
-        if (data) {
-          setData({
-            ...data,
-            settings: {
-              ...data.settings,
-              defaultPasswordHint: 'custom'
-            }
-          });
-        }
-        return true;
+      } catch (err) {
+        console.warn('Backend password change failed:', err);
       }
-      return false;
+    }
+
+    // Always update local storage hash as well
+    try {
+      const newHash = await sha256Hex(trimmed);
+      localStorage.setItem('wm_password_hash', newHash);
+      if (data) {
+        const updatedDb: WorkshopDatabase = {
+          ...data,
+          settings: {
+            ...data.settings,
+            defaultPasswordHint: 'custom'
+          }
+        };
+        persistDatabase(updatedDb);
+      }
+      return true;
     } catch {
       return false;
     }
@@ -542,14 +659,14 @@ export default function App() {
 
     const newMonth = generateNewMonth(monthName, year, data.defaultTemplates, prefill);
     const updatedMonths = [...data.months, newMonth];
-
-    setData({
+    const updatedDb: WorkshopDatabase = {
       ...data,
       months: updatedMonths,
-    });
+    };
 
+    persistDatabase(updatedDb);
     setActiveMonthId(newMonth.id);
-    saveMonthToBackend(newMonth);
+    saveMonthToBackend(newMonth, updatedDb);
   };
 
   const handleDeleteMonthClick = (monthId: string, monthName: string) => {
@@ -566,43 +683,38 @@ export default function App() {
     const monthId = monthToDelete.id;
     setIsDeletingMonth(true);
 
-    try {
-      const res = await fetch(`/api/journal/month/${monthId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+    const prevMonths = data.months;
+    const filteredMonths = prevMonths.filter((m) => m.id !== monthId);
 
-      if (res.ok) {
-        const prevMonths = data.months;
-        const filteredMonths = prevMonths.filter((m) => m.id !== monthId);
-
-        // If the active month is deleted, switch active month to adjacent or first available
-        if (activeMonthId === monthId) {
-          const deletedIndex = prevMonths.findIndex((m) => m.id === monthId);
-          const newActive = filteredMonths[Math.max(0, deletedIndex - 1)] || filteredMonths[0];
-          setActiveMonthId(newActive ? newActive.id : '');
-        }
-
-        setData({
-          ...data,
-          months: filteredMonths,
-        });
-
-        setLastSaved(new Date().toLocaleTimeString('pl-PL'));
-        setMonthToDelete(null);
-      } else {
-        const errJson = await res.json().catch(() => ({}));
-        console.error('Delete error:', errJson.error);
-        fetchJournal();
-      }
-    } catch (err) {
-      console.error('Error deleting month:', err);
-      fetchJournal();
-    } finally {
-      setIsDeletingMonth(false);
+    // If the active month is deleted, switch active month to adjacent or first available
+    if (activeMonthId === monthId) {
+      const deletedIndex = prevMonths.findIndex((m) => m.id === monthId);
+      const newActive = filteredMonths[Math.max(0, deletedIndex - 1)] || filteredMonths[0];
+      setActiveMonthId(newActive ? newActive.id : '');
     }
+
+    const updatedDb: WorkshopDatabase = {
+      ...data,
+      months: filteredMonths,
+    };
+
+    persistDatabase(updatedDb);
+    setLastSaved(new Date().toLocaleTimeString('pl-PL'));
+    setMonthToDelete(null);
+
+    if (isBackendOnline) {
+      try {
+        await fetch(`/api/journal/month/${monthId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+      } catch (err) {
+        console.error('Error deleting month on backend:', err);
+      }
+    }
+    setIsDeletingMonth(false);
   };
 
   const handleResetDataClick = () => {
@@ -616,21 +728,28 @@ export default function App() {
   const confirmResetData = async () => {
     if (!token || !isAuthenticated) return;
     setIsResetConfirmOpen(false);
-    try {
-      setIsSaving(true);
-      const res = await fetch('/api/journal/reset', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        await fetchJournal();
-        setLastSaved(new Date().toLocaleTimeString('pl-PL'));
+    setIsSaving(true);
+
+    if (isBackendOnline) {
+      try {
+        await fetch('/api/journal/reset', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (err) {
+        console.error('Reset error on backend:', err);
       }
-    } catch (err) {
-      console.error('Reset error:', err);
-    } finally {
-      setIsSaving(false);
     }
+
+    // Always reset local copy as well
+    const freshData = JSON.parse(JSON.stringify(initialDatabaseJson)) as WorkshopDatabase;
+    persistDatabase(freshData);
+    setLastSaved(new Date().toLocaleTimeString('pl-PL'));
+    if (freshData.months?.length > 0) {
+      setActiveMonthId(freshData.months[0].id);
+    }
+    showToast('Przywrócono domyślne dane dziennika.');
+    setIsSaving(false);
   };
 
   if (isLoading) {
@@ -653,10 +772,14 @@ export default function App() {
           Nie udało się odnaleźć bazy danych dziennika lekcji.
         </p>
         <button
-          onClick={fetchJournal}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold"
+          onClick={() => {
+            const initial = initialDatabaseJson as unknown as WorkshopDatabase;
+            setData(initial);
+            localStorage.setItem('wm_journal_database', JSON.stringify(initial));
+          }}
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold cursor-pointer shadow-md"
         >
-          Odśwież
+          Załaduj dane domyślne
         </button>
       </div>
     );
