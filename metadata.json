@@ -1,0 +1,8 @@
+{
+  "name": "Warsztat Muzyczny na Jagodnie — Dziennik Lekcji",
+  "description": "Elektroniczny dziennik zajęć, obecności i rozliczeń dla Warsztatu Muzycznego na Jagodnie z trybem edycji chronionym hasłem i podglądem na żywo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
