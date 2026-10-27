@@ -1,0 +1,28 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidJournal(data) {
+      return data.keys().hasAll(['months', 'settings']) &&
+             data.months is list &&
+             data.months.size() <= 200 &&
+             data.settings is map;
+    }
+
+    // Journal document for real-time multi-device sync
+    match /journal/{docId} {
+      allow read: if isValidId(docId);
+      allow create, update: if isValidId(docId) && isValidJournal(request.resource.data);
+      allow delete: if false;
+    }
+  }
+}

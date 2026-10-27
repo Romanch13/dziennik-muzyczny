@@ -30,6 +30,12 @@ import {
   X
 } from 'lucide-react';
 import initialDatabaseJson from './data/initialData.json';
+import { 
+  getJournalFromFirestore, 
+  saveJournalToFirestore, 
+  subscribeToJournal, 
+  testFirestoreConnection 
+} from './services/firebase';
 
 // SHA-256 helper for client-side password validation in offline / GitHub Pages mode
 async function sha256Hex(text: string): Promise<string> {
@@ -270,7 +276,61 @@ export default function App() {
     return Array.from(studentsSet).sort();
   }, [data]);
 
-  // Helper to persist database to local state and localStorage
+  // 3. Real-time multi-device sync via Firebase Firestore
+  useEffect(() => {
+    let unsubscribe: (() => void) | null = null;
+
+    testFirestoreConnection().then(async (online) => {
+      if (online) {
+        setIsRealtimeConnected(true);
+        // Load latest cloud data
+        try {
+          const cloudDb = await getJournalFromFirestore();
+          if (cloudDb && Array.isArray(cloudDb.months) && cloudDb.months.length > 0) {
+            setData(cloudDb);
+            try {
+              localStorage.setItem('wm_journal_database', JSON.stringify(cloudDb));
+            } catch {
+              // ignore
+            }
+          } else {
+            // First time cloud setup: seed initial database to Firestore
+            const initial = getStoredOrInitialDatabase();
+            await saveJournalToFirestore(initial);
+          }
+        } catch (err) {
+          console.warn('Initial cloud fetch error:', err);
+        }
+
+        // Subscribe to real-time changes from any device
+        try {
+          unsubscribe = subscribeToJournal((remoteDb) => {
+            if (remoteDb && Array.isArray(remoteDb.months) && remoteDb.months.length > 0) {
+              setData(remoteDb);
+              try {
+                localStorage.setItem('wm_journal_database', JSON.stringify(remoteDb));
+              } catch {
+                // ignore
+              }
+              setIsRealtimeConnected(true);
+            }
+          });
+        } catch (err) {
+          console.warn('Failed to subscribe to cloud journal:', err);
+        }
+      }
+    }).catch((err) => {
+      console.warn('Firestore connection failed:', err);
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+
+  // Helper to persist database to local state, localStorage, and Cloud Firestore
   const persistDatabase = useCallback((newData: WorkshopDatabase) => {
     setData(newData);
     try {
@@ -278,6 +338,10 @@ export default function App() {
     } catch (err) {
       console.warn('LocalStorage save failed:', err);
     }
+    // Sync to Cloud Firestore for multi-device synchronization
+    saveJournalToFirestore(newData).catch((err) => {
+      console.warn('Firestore cloud sync error:', err);
+    });
   }, []);
 
   // Save changes to backend or localStorage
@@ -752,6 +816,53 @@ export default function App() {
     setIsSaving(false);
   };
 
+  const handleExportJson = () => {
+    try {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', `dziennik_muzyczny_baza_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Kopia zapasowa bazy danych JSON została pobrana!');
+    } catch (err) {
+      console.error(err);
+      showToast('Błąd pobierania kopii zapasowej.');
+    }
+  };
+
+  const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isAuthenticated) {
+      setIsLoginOpen(true);
+      return;
+    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        const parsed = JSON.parse(text);
+        if (parsed && Array.isArray(parsed.months) && parsed.months.length > 0) {
+          persistDatabase(parsed);
+          if (parsed.months[0]?.id) {
+            setActiveMonthId(parsed.months[0].id);
+          }
+          showToast('Baza danych została pomyślnie zaimportowana i zsynchronizowana!');
+        } else {
+          showToast('Nieprawidłowy format pliku JSON.');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Błąd odczytu pliku JSON.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-slate-300 gap-4">
@@ -798,6 +909,8 @@ export default function App() {
         onOpenStats={() => setIsStatsOpen(true)}
         onExportExcel={() => activeMonth && exportMonthToExcel(activeMonth, data.schoolInfo.name)}
         onExportPdf={() => activeMonth && exportMonthToPdf(activeMonth, data.schoolInfo.name)}
+        onExportJson={handleExportJson}
+        onImportJson={handleImportJson}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         isRealtimeConnected={isRealtimeConnected}
