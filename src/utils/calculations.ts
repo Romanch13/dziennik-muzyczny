@@ -37,11 +37,13 @@ export function recalculateMonth(month: MonthData): MonthData {
     const monday = recalculateDay(w.monday);
     const friday = recalculateDay(w.friday);
     const singleDay = recalculateDay(w.singleDay);
+    const days = (w.days || []).map(d => recalculateDay(d)!).filter(Boolean);
     return {
       ...w,
       monday,
       friday,
-      singleDay
+      singleDay,
+      days
     };
   });
 
@@ -59,7 +61,8 @@ export function recalculateMonth(month: MonthData): MonthData {
     const mon = w.monday?.total || 0;
     const fri = w.friday?.total || 0;
     const sgl = w.singleDay?.total || 0;
-    return acc + mon + fri + sgl;
+    const customDays = (w.days || []).reduce((sum, d) => sum + (d?.total || 0), 0);
+    return acc + mon + fri + sgl + customDays;
   }, 0);
 
   const grandTotal = regularTotal + additionalTotal;

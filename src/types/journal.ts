@@ -11,6 +11,7 @@ export interface Lesson {
 }
 
 export interface DaySchedule {
+  id?: string;
   title: string;
   date: string;
   dayOfWeek: string;
@@ -24,6 +25,7 @@ export interface Week {
   monday: DaySchedule | null;
   friday: DaySchedule | null;
   singleDay: DaySchedule | null;
+  days?: DaySchedule[];
 }
 
 export interface AdditionalLesson {

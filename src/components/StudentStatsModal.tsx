@@ -55,9 +55,9 @@ export const StudentStatsModal: React.FC<StudentStatsModalProps> = ({
     item.totalSum += sum;
   };
 
-  // From regular weeks
+  // From regular and custom week days
   for (const w of month.weeks) {
-    const days = [w.monday, w.friday, w.singleDay];
+    const days = [w.monday, w.friday, w.singleDay, ...(w.days || [])];
     for (const d of days) {
       if (!d) continue;
       for (const l of d.lessons) {

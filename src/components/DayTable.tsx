@@ -13,7 +13,7 @@ import {
 
 interface DayTableProps {
   day: DaySchedule;
-  dayType: 'monday' | 'friday' | 'single';
+  dayType?: string;
   isAuthenticated: boolean;
   onUpdateLesson: (lessonId: string, updates: Partial<Lesson>) => void;
   onDeleteLesson: (lessonId: string) => void;
@@ -22,6 +22,7 @@ interface DayTableProps {
   copiedTemplate?: CopiedDayTemplate | null;
   onCopyAsTemplate?: () => void;
   onPasteTemplate?: (mode: 'replace' | 'append') => void;
+  onDeleteDay?: () => void;
 }
 
 export const DayTable: React.FC<DayTableProps> = ({
@@ -35,15 +36,37 @@ export const DayTable: React.FC<DayTableProps> = ({
   copiedTemplate = null,
   onCopyAsTemplate,
   onPasteTemplate,
+  onDeleteDay,
 }) => {
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
   const [tempStudentName, setTempStudentName] = useState<string>('');
   const [showPasteMenu, setShowPasteMenu] = useState(false);
 
-  const isMonday = dayType === 'monday';
-  const badgeColor = isMonday 
-    ? 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300 border-sky-300 dark:border-sky-500/30' 
-    : 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-300 border-indigo-300 dark:border-indigo-500/30';
+  // Dynamic badge color based on Polish day name
+  const getBadgeColor = (name: string) => {
+    const clean = (name || '').toLowerCase();
+    if (clean.includes('poniedz')) {
+      return 'bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300 border-sky-300 dark:border-sky-500/30';
+    }
+    if (clean.includes('wtor')) {
+      return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/30';
+    }
+    if (clean.includes('środ') || clean.includes('srod')) {
+      return 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300 border-amber-300 dark:border-amber-500/30';
+    }
+    if (clean.includes('czwart')) {
+      return 'bg-purple-100 text-purple-800 dark:bg-purple-500/15 dark:text-purple-300 border-purple-300 dark:border-purple-500/30';
+    }
+    if (clean.includes('piąt') || clean.includes('piat')) {
+      return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/15 dark:text-indigo-300 border-indigo-300 dark:border-indigo-500/30';
+    }
+    if (clean.includes('sobot')) {
+      return 'bg-rose-100 text-rose-800 dark:bg-rose-500/15 dark:text-rose-300 border-rose-300 dark:border-rose-500/30';
+    }
+    return 'bg-slate-100 text-slate-800 dark:bg-slate-500/15 dark:text-slate-300 border-slate-300 dark:border-slate-500/30';
+  };
+
+  const badgeColor = getBadgeColor(day.dayOfWeek || dayType || '');
 
   const filteredLessons = day.lessons.filter((l) => {
     if (!searchFilter.trim()) return true;
@@ -143,6 +166,27 @@ export const DayTable: React.FC<DayTableProps> = ({
               <Plus className="w-3.5 h-3.5" />
               <span>Dodaj lekcję</span>
             </button>
+
+            {/* Delete Day Button */}
+            {onDeleteDay && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      `Czy na pewno chcesz usunąć dzień «${day.dayOfWeek || day.title}» wraz ze wszystkimi lekcjami?`
+                    )
+                  ) {
+                    onDeleteDay();
+                  }
+                }}
+                className="text-[11px] font-medium text-rose-600 dark:text-rose-400 hover:text-white hover:bg-rose-600 dark:hover:bg-rose-600 border border-rose-300 dark:border-rose-500/30 px-2 py-1 rounded-lg transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
+                title="Usuń ten dzień z grafiku"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span className="hidden sm:inline">Usuń dzień</span>
+              </button>
+            )}
           </div>
         )}
       </div>

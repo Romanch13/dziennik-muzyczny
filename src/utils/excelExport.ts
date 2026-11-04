@@ -171,10 +171,14 @@ export async function exportMonthToExcel(
 
   // --- 4. WEEKS WITH 2-COLUMN TABLES ---
   for (const week of month.weeks) {
-    const leftDay: DaySchedule | null = week.monday || week.singleDay || null;
-    const rightDay: DaySchedule | null = week.monday && week.friday ? week.friday : null;
+    const allDays: DaySchedule[] = [
+      week.monday,
+      week.friday,
+      week.singleDay,
+      ...(week.days || []),
+    ].filter(Boolean) as DaySchedule[];
 
-    if (!leftDay && !rightDay) continue;
+    if (allDays.length === 0) continue;
 
     // --- A. WEEK HEADER BAR ---
     ws.mergeCells(curRow, 1, curRow, 15);
@@ -182,11 +186,16 @@ export async function exportMonthToExcel(
       fill: C_WEEK_FILL,
       border: thinBorder,
       font: { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF1F4E79' } },
-      alignment: { vertical: 'middle', horizontal: 'center' }
+      alignment: { vertical: 'middle', horizontal: 'center' },
     });
     ws.getCell(curRow, 1).value = week.weekTitle;
     ws.getRow(curRow).height = 20;
     curRow++;
+
+    // Iterate through all days of the week in pairs of 2 (left and right)
+    for (let p = 0; p < allDays.length; p += 2) {
+      const leftDay: DaySchedule | null = allDays[p];
+      const rightDay: DaySchedule | null = p + 1 < allDays.length ? allDays[p + 1] : null;
 
     // --- B. DAY SUBHEADERS ---
     // Left day
@@ -459,7 +468,14 @@ export async function exportMonthToExcel(
         border: thinBorder,
       });
     }
-    curRow++;
+      curRow++;
+
+      // Spacer between day pairs if there are more in this week
+      if (p + 2 < allDays.length) {
+        ws.getRow(curRow).height = 8;
+        curRow++;
+      }
+    }
 
     // Spacer row after week
     ws.getRow(curRow).height = 10;

@@ -4,10 +4,19 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { WorkshopDatabase, MonthData, Lesson, AdditionalLesson, CopiedDayTemplate, WorkspaceType } from './types/journal';
+import { 
+  WorkshopDatabase, 
+  MonthData, 
+  Week, 
+  DaySchedule, 
+  Lesson, 
+  AdditionalLesson, 
+  CopiedDayTemplate, 
+  WorkspaceType 
+} from './types/journal';
 import { recalculateMonth, exportMonthToExcel } from './utils/calculations';
 import { exportMonthToPdf } from './utils/pdfExport';
-import { generateNewMonth, createEmptyPrivateMonths } from './utils/monthGenerator';
+import { generateNewMonth, createEmptyPrivateMonths, sanitizePrivateMonths } from './utils/monthGenerator';
 import { Header } from './components/Header';
 import { MonthNavigation } from './components/MonthNavigation';
 import { WeekCard } from './components/WeekCard';
@@ -57,7 +66,10 @@ function ensureWorkspaces(db: WorkshopDatabase): WorkshopDatabase {
       privateMonths: createEmptyPrivateMonths(db.months || []),
     };
   }
-  return db;
+  return {
+    ...db,
+    privateMonths: sanitizePrivateMonths(db.privateMonths),
+  };
 }
 
 // Safely retrieve cached data or bundled default database
@@ -178,7 +190,7 @@ export default function App() {
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [addLessonTarget, setAddLessonTarget] = useState<{
     weekId: string;
-    dayKey: 'monday' | 'friday' | 'singleDay';
+    dayKey: string;
     dayDate: string;
     dayOfWeek: string;
   } | null>(null);
@@ -307,7 +319,7 @@ export default function App() {
 
     for (const m of monthsToScan) {
       for (const w of m.weeks) {
-        const days = [w.monday, w.friday, w.singleDay];
+        const days = [w.monday, w.friday, w.singleDay, ...(w.days || [])];
         for (const d of days) {
           if (!d) continue;
           for (const l of d.lessons) {
@@ -468,10 +480,65 @@ export default function App() {
     }
   };
 
+  // Day schedule helper functions
+  const updateDayInWeek = (
+    week: Week,
+    dayIdentifier: string,
+    updater: (d: DaySchedule) => DaySchedule
+  ): Week => {
+    if (dayIdentifier === 'monday' && week.monday) {
+      return { ...week, monday: updater(week.monday) };
+    }
+    if (dayIdentifier === 'friday' && week.friday) {
+      return { ...week, friday: updater(week.friday) };
+    }
+    if (dayIdentifier === 'singleDay' && week.singleDay) {
+      return { ...week, singleDay: updater(week.singleDay) };
+    }
+
+    if (week.days && week.days.length > 0) {
+      let found = false;
+      const newDays = week.days.map((d) => {
+        if (d.id === dayIdentifier || d.dayOfWeek === dayIdentifier) {
+          found = true;
+          return updater(d);
+        }
+        return d;
+      });
+      if (found) {
+        return { ...week, days: newDays };
+      }
+    }
+
+    if (week.monday && week.monday.id === dayIdentifier) {
+      return { ...week, monday: updater(week.monday) };
+    }
+    if (week.friday && week.friday.id === dayIdentifier) {
+      return { ...week, friday: updater(week.friday) };
+    }
+    if (week.singleDay && week.singleDay.id === dayIdentifier) {
+      return { ...week, singleDay: updater(week.singleDay) };
+    }
+
+    return week;
+  };
+
+  const findDayInWeek = (week: Week, dayIdentifier: string): DaySchedule | null => {
+    if (dayIdentifier === 'monday') return week.monday;
+    if (dayIdentifier === 'friday') return week.friday;
+    if (dayIdentifier === 'singleDay') return week.singleDay;
+    if (week.monday && week.monday.id === dayIdentifier) return week.monday;
+    if (week.friday && week.friday.id === dayIdentifier) return week.friday;
+    if (week.singleDay && week.singleDay.id === dayIdentifier) return week.singleDay;
+    return (
+      week.days?.find((d) => d.id === dayIdentifier || d.dayOfWeek === dayIdentifier) || null
+    );
+  };
+
   // Lesson actions
   const handleUpdateLesson = (
     weekId: string,
-    dayKey: 'monday' | 'friday' | 'singleDay',
+    dayIdentifier: string,
     lessonId: string,
     updates: Partial<Lesson>
   ) => {
@@ -483,32 +550,27 @@ export default function App() {
     updateActiveMonth((month) => {
       const updatedWeeks = month.weeks.map((w) => {
         if (w.id !== weekId) return w;
-        const targetDay = w[dayKey];
-        if (!targetDay) return w;
-
-        const updatedLessons = targetDay.lessons.map((l) =>
-          l.id === lessonId ? { ...l, ...updates } : l
-        );
-
-        return {
-          ...w,
-          [dayKey]: {
+        return updateDayInWeek(w, dayIdentifier, (targetDay) => {
+          const updatedLessons = targetDay.lessons.map((l) =>
+            l.id === lessonId ? { ...l, ...updates } : l
+          );
+          return {
             ...targetDay,
-            lessons: updatedLessons
-          }
-        };
+            lessons: updatedLessons,
+          };
+        });
       });
 
       return {
         ...month,
-        weeks: updatedWeeks
+        weeks: updatedWeeks,
       };
     });
   };
 
   const handleDeleteLesson = (
     weekId: string,
-    dayKey: 'monday' | 'friday' | 'singleDay',
+    dayIdentifier: string,
     lessonId: string
   ) => {
     if (!isAuthenticated) return;
@@ -516,23 +578,18 @@ export default function App() {
     updateActiveMonth((month) => {
       const updatedWeeks = month.weeks.map((w) => {
         if (w.id !== weekId) return w;
-        const targetDay = w[dayKey];
-        if (!targetDay) return w;
-
-        const updatedLessons = targetDay.lessons.filter((l) => l.id !== lessonId);
-
-        return {
-          ...w,
-          [dayKey]: {
+        return updateDayInWeek(w, dayIdentifier, (targetDay) => {
+          const updatedLessons = targetDay.lessons.filter((l) => l.id !== lessonId);
+          return {
             ...targetDay,
-            lessons: updatedLessons
-          }
-        };
+            lessons: updatedLessons,
+          };
+        });
       });
 
       return {
         ...month,
-        weeks: updatedWeeks
+        weeks: updatedWeeks,
       };
     });
   };
@@ -544,37 +601,114 @@ export default function App() {
     updateActiveMonth((month) => {
       const updatedWeeks = month.weeks.map((w) => {
         if (w.id !== weekId) return w;
-        const targetDay = w[dayKey];
-        if (!targetDay) return w;
-
-        const newLesson: Lesson = {
-          ...lessonData,
-          id: `les-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`
-        };
-
-        return {
-          ...w,
-          [dayKey]: {
+        return updateDayInWeek(w, dayKey, (targetDay) => {
+          const newLesson: Lesson = {
+            ...lessonData,
+            id: `les-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          };
+          return {
             ...targetDay,
-            lessons: [...targetDay.lessons, newLesson]
-          }
-        };
+            lessons: [...targetDay.lessons, newLesson],
+          };
+        });
       });
 
       return {
         ...month,
-        weeks: updatedWeeks
+        weeks: updatedWeeks,
       };
     });
 
     setAddLessonTarget(null);
   };
 
+  // Day addition and deletion for Private Workspace
+  const handleAddDayToWeek = (weekId: string, dayOfWeek: string, date: string) => {
+    if (!isAuthenticated) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    updateActiveMonth((month) => {
+      const updatedWeeks = month.weeks.map((w) => {
+        if (w.id !== weekId) return w;
+
+        const newDay: DaySchedule = {
+          id: `day-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          title: `${dayOfWeek}, ${date}`,
+          date,
+          dayOfWeek,
+          lessons: [],
+          total: 0,
+        };
+
+        return {
+          ...w,
+          days: [...(w.days || []), newDay],
+        };
+      });
+
+      return {
+        ...month,
+        weeks: updatedWeeks,
+      };
+    });
+
+    showToast(`Dodano dzień «${dayOfWeek}, ${date}» do grafiku!`);
+  };
+
+  const handleDeleteDayFromWeek = (weekId: string, dayIdentifier: string) => {
+    if (!isAuthenticated) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    updateActiveMonth((month) => {
+      const updatedWeeks = month.weeks.map((w) => {
+        if (w.id !== weekId) return w;
+
+        let monday = w.monday;
+        let friday = w.friday;
+        let singleDay = w.singleDay;
+
+        if (dayIdentifier === 'monday' || (w.monday && w.monday.id === dayIdentifier)) {
+          monday = null;
+        }
+        if (dayIdentifier === 'friday' || (w.friday && w.friday.id === dayIdentifier)) {
+          friday = null;
+        }
+        if (dayIdentifier === 'singleDay' || (w.singleDay && w.singleDay.id === dayIdentifier)) {
+          singleDay = null;
+        }
+
+        const days = (w.days || []).filter(
+          (d) => d.id !== dayIdentifier && d.dayOfWeek !== dayIdentifier
+        );
+
+        return {
+          ...w,
+          monday,
+          friday,
+          singleDay,
+          days,
+        };
+      });
+
+      return {
+        ...month,
+        weeks: updatedWeeks,
+      };
+    });
+
+    showToast('Dzień został usunięty z grafiku.');
+  };
+
   // Day Template copy & paste actions
-  const handleCopyDayTemplate = (weekId: string, dayKey: 'monday' | 'friday' | 'singleDay') => {
+  const handleCopyDayTemplate = (weekId: string, dayIdentifier: string) => {
     if (!activeMonth) return;
     const week = activeMonth.weeks.find((w) => w.id === weekId);
-    const targetDay = week ? week[dayKey] : null;
+    if (!week) return;
+    const targetDay = findDayInWeek(week, dayIdentifier);
     if (!targetDay) return;
 
     const validLessons = targetDay.lessons
@@ -603,7 +737,7 @@ export default function App() {
 
   const handlePasteDayTemplate = (
     weekId: string,
-    dayKey: 'monday' | 'friday' | 'singleDay',
+    dayIdentifier: string,
     mode: 'replace' | 'append'
   ) => {
     if (!isAuthenticated) {
@@ -615,29 +749,26 @@ export default function App() {
     updateActiveMonth((month) => {
       const updatedWeeks = month.weeks.map((w) => {
         if (w.id !== weekId) return w;
-        const targetDay = w[dayKey];
-        if (!targetDay) return w;
+        return updateDayInWeek(w, dayIdentifier, (targetDay) => {
+          const newLessons: Lesson[] = copiedTemplate.lessons.map((tpl, i) => ({
+            id: `les-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 6)}`,
+            date: targetDay.date,
+            student: tpl.student,
+            duration: tpl.duration,
+            price: tpl.price,
+            status: 'Był',
+            excused: '-',
+            sum: tpl.price,
+          }));
 
-        const newLessons: Lesson[] = copiedTemplate.lessons.map((tpl, i) => ({
-          id: `les-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 6)}`,
-          date: targetDay.date,
-          student: tpl.student,
-          duration: tpl.duration,
-          price: tpl.price,
-          status: 'Był',
-          excused: '-',
-          sum: tpl.price,
-        }));
+          const finalLessons =
+            mode === 'replace' ? newLessons : [...targetDay.lessons, ...newLessons];
 
-        const finalLessons = mode === 'replace' ? newLessons : [...targetDay.lessons, ...newLessons];
-
-        return {
-          ...w,
-          [dayKey]: {
+          return {
             ...targetDay,
             lessons: finalLessons,
-          },
-        };
+          };
+        });
       });
 
       return {
@@ -1102,20 +1233,30 @@ export default function App() {
                 <WeekCard
                   key={week.id}
                   week={week}
+                  monthName={activeMonth.name}
                   isAuthenticated={isAuthenticated}
-                  onUpdateLesson={(dayKey, lessonId, updates) =>
-                    handleUpdateLesson(week.id, dayKey, lessonId, updates)
+                  isPrivateWorkspace={activeWorkspace === 'private'}
+                  onAddDay={(weekId, dayOfWeek, date) =>
+                    handleAddDayToWeek(weekId, dayOfWeek, date)
                   }
-                  onDeleteLesson={(dayKey, lessonId) =>
-                    handleDeleteLesson(week.id, dayKey, lessonId)
+                  onDeleteDay={(weekId, dayIdentifier) =>
+                    handleDeleteDayFromWeek(weekId, dayIdentifier)
                   }
-                  onOpenAddLesson={(dayKey, dayDate, dayOfWeek) =>
-                    setAddLessonTarget({ weekId: week.id, dayKey, dayDate, dayOfWeek })
+                  onUpdateLesson={(dayIdentifier, lessonId, updates) =>
+                    handleUpdateLesson(week.id, dayIdentifier, lessonId, updates)
+                  }
+                  onDeleteLesson={(dayIdentifier, lessonId) =>
+                    handleDeleteLesson(week.id, dayIdentifier, lessonId)
+                  }
+                  onOpenAddLesson={(dayIdentifier, dayDate, dayOfWeek) =>
+                    setAddLessonTarget({ weekId: week.id, dayKey: dayIdentifier, dayDate, dayOfWeek })
                   }
                   searchFilter={searchQuery}
                   copiedTemplate={copiedTemplate}
-                  onCopyTemplate={(dayKey) => handleCopyDayTemplate(week.id, dayKey)}
-                  onPasteTemplate={(dayKey, mode) => handlePasteDayTemplate(week.id, dayKey, mode)}
+                  onCopyTemplate={(dayIdentifier) => handleCopyDayTemplate(week.id, dayIdentifier)}
+                  onPasteTemplate={(dayIdentifier, mode) =>
+                    handlePasteDayTemplate(week.id, dayIdentifier, mode)
+                  }
                 />
               ))}
             </div>

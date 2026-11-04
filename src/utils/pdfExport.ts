@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
 import autoTablePlugin from 'jspdf-autotable';
-import { MonthData } from '../types/journal';
+import { MonthData, DaySchedule } from '../types/journal';
 import { LIBERATION_SANS_REGULAR, LIBERATION_SANS_BOLD } from './polishFont';
 
 // Resolve plugin function for ESM/bundler compatibility
@@ -87,7 +87,7 @@ export function exportMonthToPdf(
   });
   doc.text(`Data raportu: ${printDate}`, pageWidth - margin - 53, 21);
 
-  // --- 2. EXECUTIVE KPI SUMMARY CARDS (Clean 2-card layout without DODATKOWO & FREKWENCJA cards) ---
+  // --- 2. EXECUTIVE KPI SUMMARY CARDS ---
   let currentY = 40;
   const cardGap = 4;
   const cardWidth = (contentWidth - cardGap) / 2;
@@ -105,14 +105,18 @@ export function exportMonthToPdf(
   doc.setTextColor(15, 23, 42);
   doc.text(`${month.grandTotal.toLocaleString('pl-PL')} zł`, margin + 5, currentY + 15);
 
-  // Card 2: Grafik regularny (Poniedziałki + Piątki)
+  // Card 2: Grafik regularny
   doc.setFillColor(248, 250, 252); // Slate-50
   doc.setDrawColor(226, 232, 240);
   doc.roundedRect(margin + cardWidth + cardGap, currentY, cardWidth, cardHeight, 2, 2, 'FD');
   doc.setFontSize(8);
   doc.setTextColor(71, 85, 105);
   doc.setFont('LiberationSans', 'bold');
-  doc.text('GRAFIK REGULARNY (PONIEDZIAŁKI + PIĄTKI)', margin + cardWidth + cardGap + 5, currentY + 6);
+  doc.text(
+    isPrivate ? 'GRAFIK REGULARNY (LEKCJE PRYWATNE)' : 'GRAFIK REGULARNY (PONIEDZIAŁKI + PIĄTKI)',
+    margin + cardWidth + cardGap + 5,
+    currentY + 6
+  );
   doc.setFontSize(14);
   doc.setTextColor(15, 23, 42);
   doc.text(`${month.regularTotal.toLocaleString('pl-PL')} zł`, margin + cardWidth + cardGap + 5, currentY + 15);
@@ -121,7 +125,13 @@ export function exportMonthToPdf(
 
   // --- 3. WEEKS AND LESSON TABLES ---
   for (const week of month.weeks) {
-    const days = [week.monday, week.friday, week.singleDay].filter(Boolean);
+    const days: DaySchedule[] = [
+      week.monday,
+      week.friday,
+      week.singleDay,
+      ...(week.days || []),
+    ].filter(Boolean) as DaySchedule[];
+
     if (!days.length) continue;
 
     // Check if new page needed
@@ -130,10 +140,7 @@ export function exportMonthToPdf(
       currentY = 18;
     }
 
-    const weekTotal =
-      (week.monday?.total || 0) +
-      (week.friday?.total || 0) +
-      (week.singleDay?.total || 0);
+    const weekTotal = days.reduce((sum, d) => sum + (d?.total || 0), 0);
 
     // Week header ribbon
     doc.setFillColor(30, 41, 59); // Slate-800
