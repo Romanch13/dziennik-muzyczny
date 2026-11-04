@@ -1,0 +1,2465 @@
+{
+  "schoolInfo": {
+    "name": "Warsztat Muzyczny na Jagodnie",
+    "location": "Wrocław — Jagodno",
+    "description": "Dziennik zajęć, obecności i rozliczeń uczniów",
+    "pricing": [
+      {
+        "duration": "30 min",
+        "price": 40
+      },
+      {
+        "duration": "45 min",
+        "price": 60
+      },
+      {
+        "duration": "60 min",
+        "price": 70
+      }
+    ],
+    "rules": [
+      "Poniedziałek i Piątek tego samego tygodnia obok siebie (jeśli tylko 1 dzień w tygodniu — osobno).",
+      "Jeśli «Nie był» — wiersz przekreślony i nie liczy się do sumy (kwota 0 zł).",
+      "Kolumna «Nie było, ale liczę»: zaznaczenie opcji «Liczę» dolicza pełną stawkę mimo nieobecności.",
+      "Dział DODATKOWO pozwala na dodawanie lekcji w dowolne dni od poniedziałku do soboty."
+    ]
+  },
+  "defaultTemplates": {
+    "monday": [
+      {
+        "student": "Kuba",
+        "duration": "45 min",
+        "price": 60
+      },
+      {
+        "student": "Pola",
+        "duration": "45 min",
+        "price": 60
+      },
+      {
+        "student": "Kacper",
+        "duration": "45 min",
+        "price": 60
+      },
+      {
+        "student": "Staś",
+        "duration": "30 min",
+        "price": 40
+      },
+      {
+        "student": "Ludwik",
+        "duration": "30 min",
+        "price": 40
+      },
+      {
+        "student": "Ela",
+        "duration": "60 min",
+        "price": 70
+      },
+      {
+        "student": "Marko",
+        "duration": "45 min",
+        "price": 60
+      }
+    ],
+    "friday": [
+      {
+        "student": "Hugo",
+        "duration": "60 min",
+        "price": 70
+      },
+      {
+        "student": "Ola",
+        "duration": "60 min",
+        "price": 70
+      },
+      {
+        "student": "Lila",
+        "duration": "30 min",
+        "price": 40
+      },
+      {
+        "student": "Wanda",
+        "duration": "45 min",
+        "price": 60
+      },
+      {
+        "student": "Ala/Olek",
+        "duration": "45 min",
+        "price": 60
+      }
+    ]
+  },
+  "settings": {
+    "passwordHash": "346defbfd00a9748ee20cc8ea5ad8a33ab30d27c9989aa36783702c8ba16c9b2",
+    "defaultPasswordHint": "custom",
+    "lastModified": "2026-10-26T23:17:51.840Z"
+  },
+  "months": [
+    {
+      "id": "pazdziernik-2026",
+      "name": "Październik 2026",
+      "weeks": [
+        {
+          "id": "pazdziernik-2026-week-1",
+          "weekTitle": "Tydzień 40",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 02.10.2026",
+            "date": "02.10.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-1-621e2d",
+                "date": "02.10.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-2-e15600",
+                "date": "02.10.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-3-54f7d1",
+                "date": "02.10.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-4-613f46",
+                "date": "02.10.2026",
+                "student": "Wanda",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-5-d88ba6",
+                "date": "02.10.2026",
+                "student": "Ala",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 310
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2026-week-2",
+          "weekTitle": "Tydzień 41",
+          "monday": {
+            "title": "Poniedziałek, 05.10.2026",
+            "date": "05.10.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-ebbe2f",
+                "date": "05.10.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-396c19",
+                "date": "05.10.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-6004bd",
+                "date": "05.10.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-0c1d5d",
+                "date": "05.10.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-cab236",
+                "date": "05.10.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-2440d9",
+                "date": "05.10.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 320
+          },
+          "friday": {
+            "title": "Piątek, 09.10.2026",
+            "date": "09.10.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-a89992",
+                "date": "09.10.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-a426d1",
+                "date": "09.10.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-b946ef",
+                "date": "09.10.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-b8f309",
+                "date": "09.10.2026",
+                "student": "Wanda",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-5-02577f",
+                "date": "09.10.2026",
+                "student": "Ala",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 310
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2026-week-3",
+          "weekTitle": "Tydzień 42",
+          "monday": {
+            "title": "Poniedziałek, 12.10.2026",
+            "date": "12.10.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-972838",
+                "date": "12.10.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-62e8b8",
+                "date": "12.10.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-33af05",
+                "date": "12.10.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Nie był",
+                "excused": "Liczę",
+                "sum": 60
+              },
+              {
+                "id": "les-4-d8bc01",
+                "date": "12.10.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-f4dec6",
+                "date": "12.10.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-fdbf4e",
+                "date": "12.10.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-519e47",
+                "date": "12.10.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 16.10.2026",
+            "date": "16.10.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-a65628",
+                "date": "16.10.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-39c242",
+                "date": "16.10.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-0bb6c5",
+                "date": "16.10.2026",
+                "student": "Wanda",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-4-8f6963",
+                "date": "16.10.2026",
+                "student": "Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-cdae64",
+                "date": "16.10.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              }
+            ],
+            "total": 310
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2026-week-4",
+          "weekTitle": "Tydzień 43",
+          "monday": {
+            "title": "Poniedziałek, 19.10.2026",
+            "date": "19.10.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-37a1b1",
+                "date": "19.10.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-86b676",
+                "date": "19.10.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-bf28e7",
+                "date": "19.10.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-9d93af",
+                "date": "19.10.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-4b69ec",
+                "date": "19.10.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-08102e",
+                "date": "19.10.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-6d578f",
+                "date": "19.10.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 23.10.2026",
+            "date": "23.10.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-25a51e",
+                "date": "23.10.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Nie był",
+                "excused": "Nie liczę",
+                "sum": 0
+              },
+              {
+                "id": "les-r-2-261a37",
+                "date": "23.10.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-a736c9",
+                "date": "23.10.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-d2c2a4",
+                "date": "23.10.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-505785",
+                "date": "23.10.2026",
+                "student": "Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 230
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2026-week-5",
+          "weekTitle": "Tydzień 44",
+          "monday": {
+            "title": "Poniedziałek, 26.10.2026",
+            "date": "26.10.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-0413f2",
+                "date": "26.10.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-e271ed",
+                "date": "26.10.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-3e1bbf",
+                "date": "26.10.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-60a237",
+                "date": "26.10.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-a90446",
+                "date": "26.10.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-8277f6",
+                "date": "26.10.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-6aebf7",
+                "date": "26.10.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 30.10.2026",
+            "date": "30.10.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-5d5b2a",
+                "date": "30.10.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-4e9258",
+                "date": "30.10.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-0bd9e8",
+                "date": "30.10.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-134548",
+                "date": "30.10.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-5a481c",
+                "date": "30.10.2026",
+                "student": "Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 300
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [
+        {
+          "id": "add-1-a756ef",
+          "day": "Czwartek",
+          "date": "15.10.2026",
+          "student": "Dawid",
+          "duration": "60 min",
+          "price": 75,
+          "status": "Był",
+          "sum": 75
+        },
+        {
+          "id": "add-2-ad693f",
+          "day": "Czwartek",
+          "date": "15.10.2026",
+          "student": "Miłosz",
+          "duration": "60 min",
+          "price": 75,
+          "status": "Był",
+          "sum": 75
+        }
+      ],
+      "additionalTotal": 150,
+      "regularTotal": 2950,
+      "grandTotal": 3100
+    },
+    {
+      "id": "listopad-2026",
+      "name": "Listopad 2026",
+      "weeks": [
+        {
+          "id": "listopad-2026-week-1",
+          "weekTitle": "Tydzień 45",
+          "monday": {
+            "title": "Poniedziałek, 02.11.2026",
+            "date": "02.11.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-ea6438",
+                "date": "02.11.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-4e9818",
+                "date": "02.11.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-2934c3",
+                "date": "02.11.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-7b0690",
+                "date": "02.11.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-0042a6",
+                "date": "02.11.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-c7511c",
+                "date": "02.11.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-83c274",
+                "date": "02.11.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 06.11.2026",
+            "date": "06.11.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-bdad62",
+                "date": "06.11.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-4b042b",
+                "date": "06.11.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-eb6923",
+                "date": "06.11.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-de6eef",
+                "date": "06.11.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-ba7410",
+                "date": "06.11.2026",
+                "student": "Ala/Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 300
+          },
+          "singleDay": null
+        },
+        {
+          "id": "listopad-2026-week-2",
+          "weekTitle": "Tydzień 46",
+          "monday": {
+            "title": "Poniedziałek, 09.11.2026",
+            "date": "09.11.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-b258d5",
+                "date": "09.11.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-ba5707",
+                "date": "09.11.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-b945bc",
+                "date": "09.11.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-14b9dc",
+                "date": "09.11.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-827e31",
+                "date": "09.11.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-5945e4",
+                "date": "09.11.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-cb3af3",
+                "date": "09.11.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 13.11.2026",
+            "date": "13.11.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-3be2ca",
+                "date": "13.11.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-5b4d8d",
+                "date": "13.11.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-f379ed",
+                "date": "13.11.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-b57475",
+                "date": "13.11.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-822d8d",
+                "date": "13.11.2026",
+                "student": "Ala/Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 300
+          },
+          "singleDay": null
+        },
+        {
+          "id": "listopad-2026-week-3",
+          "weekTitle": "Tydzień 47",
+          "monday": {
+            "title": "Poniedziałek, 16.11.2026",
+            "date": "16.11.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-86a052",
+                "date": "16.11.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-02aad5",
+                "date": "16.11.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-898c51",
+                "date": "16.11.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-b11c7b",
+                "date": "16.11.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-611d53",
+                "date": "16.11.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-db3ea6",
+                "date": "16.11.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-071614",
+                "date": "16.11.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 20.11.2026",
+            "date": "20.11.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-1c1380",
+                "date": "20.11.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-fafff2",
+                "date": "20.11.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-54788a",
+                "date": "20.11.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-101a7e",
+                "date": "20.11.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-064a1b",
+                "date": "20.11.2026",
+                "student": "Ala/Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 300
+          },
+          "singleDay": null
+        },
+        {
+          "id": "listopad-2026-week-4",
+          "weekTitle": "Tydzień 48",
+          "monday": {
+            "title": "Poniedziałek, 23.11.2026",
+            "date": "23.11.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-144b97",
+                "date": "23.11.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-4e530b",
+                "date": "23.11.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-f08573",
+                "date": "23.11.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-4e0fcf",
+                "date": "23.11.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-60a221",
+                "date": "23.11.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-f06bce",
+                "date": "23.11.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-041b0e",
+                "date": "23.11.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": {
+            "title": "Piątek, 27.11.2026",
+            "date": "27.11.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [
+              {
+                "id": "les-r-1-785b64",
+                "date": "27.11.2026",
+                "student": "Hugo",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-2-48a160",
+                "date": "27.11.2026",
+                "student": "Ola",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-r-3-b4805a",
+                "date": "27.11.2026",
+                "student": "Lila",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-r-4-7bfe58",
+                "date": "27.11.2026",
+                "student": "Wanda",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-r-5-ab32d7",
+                "date": "27.11.2026",
+                "student": "Ala/Olek",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 300
+          },
+          "singleDay": null
+        },
+        {
+          "id": "listopad-2026-week-5",
+          "weekTitle": "Tydzień 49",
+          "monday": {
+            "title": "Poniedziałek, 30.11.2026",
+            "date": "30.11.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [
+              {
+                "id": "les-1-7498d5",
+                "date": "30.11.2026",
+                "student": "Kuba",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-2-7bd26b",
+                "date": "30.11.2026",
+                "student": "Pola",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-3-6c9e0f",
+                "date": "30.11.2026",
+                "student": "Kacper",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              },
+              {
+                "id": "les-4-48ed22",
+                "date": "30.11.2026",
+                "student": "Staś",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-5-7aefb1",
+                "date": "30.11.2026",
+                "student": "Ludwik",
+                "duration": "30 min",
+                "price": 40,
+                "status": "Był",
+                "excused": "",
+                "sum": 40
+              },
+              {
+                "id": "les-6-0fffe1",
+                "date": "30.11.2026",
+                "student": "Ela",
+                "duration": "60 min",
+                "price": 70,
+                "status": "Był",
+                "excused": "",
+                "sum": 70
+              },
+              {
+                "id": "les-7-22f756",
+                "date": "30.11.2026",
+                "student": "Marko",
+                "duration": "45 min",
+                "price": 60,
+                "status": "Był",
+                "excused": "",
+                "sum": 60
+              }
+            ],
+            "total": 390
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 3150,
+      "grandTotal": 3150
+    },
+    {
+      "id": "grudzien-2026",
+      "name": "Grudzień 2026",
+      "weeks": [
+        {
+          "id": "grudzien-2026-week-1",
+          "weekTitle": "Tydzień 49",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 04.12.2026",
+            "date": "04.12.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "grudzien-2026-week-2",
+          "weekTitle": "Tydzień 50",
+          "monday": {
+            "title": "Poniedziałek, 07.12.2026",
+            "date": "07.12.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 11.12.2026",
+            "date": "11.12.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "grudzien-2026-week-3",
+          "weekTitle": "Tydzień 51",
+          "monday": {
+            "title": "Poniedziałek, 14.12.2026",
+            "date": "14.12.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 18.12.2026",
+            "date": "18.12.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "grudzien-2026-week-4",
+          "weekTitle": "Tydzień 52",
+          "monday": {
+            "title": "Poniedziałek, 21.12.2026",
+            "date": "21.12.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 25.12.2026",
+            "date": "25.12.2026",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "grudzien-2026-week-5",
+          "weekTitle": "Tydzień 53",
+          "monday": {
+            "title": "Poniedziałek, 28.12.2026",
+            "date": "28.12.2026",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "styczen-2027",
+      "name": "Styczeń 2027",
+      "weeks": [
+        {
+          "id": "styczen-2027-week-1",
+          "weekTitle": "Tydzień 53",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 01.01.2027",
+            "date": "01.01.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "styczen-2027-week-2",
+          "weekTitle": "Tydzień 1",
+          "monday": {
+            "title": "Poniedziałek, 04.01.2027",
+            "date": "04.01.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 08.01.2027",
+            "date": "08.01.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "styczen-2027-week-3",
+          "weekTitle": "Tydzień 2",
+          "monday": {
+            "title": "Poniedziałek, 11.01.2027",
+            "date": "11.01.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 15.01.2027",
+            "date": "15.01.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "styczen-2027-week-4",
+          "weekTitle": "Tydzień 3",
+          "monday": {
+            "title": "Poniedziałek, 18.01.2027",
+            "date": "18.01.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 22.01.2027",
+            "date": "22.01.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "styczen-2027-week-5",
+          "weekTitle": "Tydzień 4",
+          "monday": {
+            "title": "Poniedziałek, 25.01.2027",
+            "date": "25.01.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 29.01.2027",
+            "date": "29.01.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "luty-2027",
+      "name": "Luty 2027",
+      "weeks": [
+        {
+          "id": "luty-2027-week-1",
+          "weekTitle": "Tydzień 5",
+          "monday": {
+            "title": "Poniedziałek, 01.02.2027",
+            "date": "01.02.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 05.02.2027",
+            "date": "05.02.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "luty-2027-week-2",
+          "weekTitle": "Tydzień 6",
+          "monday": {
+            "title": "Poniedziałek, 08.02.2027",
+            "date": "08.02.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 12.02.2027",
+            "date": "12.02.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "luty-2027-week-3",
+          "weekTitle": "Tydzień 7",
+          "monday": {
+            "title": "Poniedziałek, 15.02.2027",
+            "date": "15.02.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 19.02.2027",
+            "date": "19.02.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "luty-2027-week-4",
+          "weekTitle": "Tydzień 8",
+          "monday": {
+            "title": "Poniedziałek, 22.02.2027",
+            "date": "22.02.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 26.02.2027",
+            "date": "26.02.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "marzec-2027",
+      "name": "Marzec 2027",
+      "weeks": [
+        {
+          "id": "marzec-2027-week-1",
+          "weekTitle": "Tydzień 9",
+          "monday": {
+            "title": "Poniedziałek, 01.03.2027",
+            "date": "01.03.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 05.03.2027",
+            "date": "05.03.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "marzec-2027-week-2",
+          "weekTitle": "Tydzień 10",
+          "monday": {
+            "title": "Poniedziałek, 08.03.2027",
+            "date": "08.03.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 12.03.2027",
+            "date": "12.03.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "marzec-2027-week-3",
+          "weekTitle": "Tydzień 11",
+          "monday": {
+            "title": "Poniedziałek, 15.03.2027",
+            "date": "15.03.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 19.03.2027",
+            "date": "19.03.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "marzec-2027-week-4",
+          "weekTitle": "Tydzień 12",
+          "monday": {
+            "title": "Poniedziałek, 22.03.2027",
+            "date": "22.03.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 26.03.2027",
+            "date": "26.03.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "marzec-2027-week-5",
+          "weekTitle": "Tydzień 13",
+          "monday": {
+            "title": "Poniedziałek, 29.03.2027",
+            "date": "29.03.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "kwiecien-2027",
+      "name": "Kwiecień 2027",
+      "weeks": [
+        {
+          "id": "kwiecien-2027-week-1",
+          "weekTitle": "Tydzień 13",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 02.04.2027",
+            "date": "02.04.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "kwiecien-2027-week-2",
+          "weekTitle": "Tydzień 14",
+          "monday": {
+            "title": "Poniedziałek, 05.04.2027",
+            "date": "05.04.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 09.04.2027",
+            "date": "09.04.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "kwiecien-2027-week-3",
+          "weekTitle": "Tydzień 15",
+          "monday": {
+            "title": "Poniedziałek, 12.04.2027",
+            "date": "12.04.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 16.04.2027",
+            "date": "16.04.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "kwiecien-2027-week-4",
+          "weekTitle": "Tydzień 16",
+          "monday": {
+            "title": "Poniedziałek, 19.04.2027",
+            "date": "19.04.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 23.04.2027",
+            "date": "23.04.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "kwiecien-2027-week-5",
+          "weekTitle": "Tydzień 17",
+          "monday": {
+            "title": "Poniedziałek, 26.04.2027",
+            "date": "26.04.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 30.04.2027",
+            "date": "30.04.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "maj-2027",
+      "name": "Maj 2027",
+      "weeks": [
+        {
+          "id": "maj-2027-week-1",
+          "weekTitle": "Tydzień 18",
+          "monday": {
+            "title": "Poniedziałek, 03.05.2027",
+            "date": "03.05.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 07.05.2027",
+            "date": "07.05.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "maj-2027-week-2",
+          "weekTitle": "Tydzień 19",
+          "monday": {
+            "title": "Poniedziałek, 10.05.2027",
+            "date": "10.05.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 14.05.2027",
+            "date": "14.05.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "maj-2027-week-3",
+          "weekTitle": "Tydzień 20",
+          "monday": {
+            "title": "Poniedziałek, 17.05.2027",
+            "date": "17.05.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 21.05.2027",
+            "date": "21.05.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "maj-2027-week-4",
+          "weekTitle": "Tydzień 21",
+          "monday": {
+            "title": "Poniedziałek, 24.05.2027",
+            "date": "24.05.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 28.05.2027",
+            "date": "28.05.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "maj-2027-week-5",
+          "weekTitle": "Tydzień 22",
+          "monday": {
+            "title": "Poniedziałek, 31.05.2027",
+            "date": "31.05.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "czerwiec-2027",
+      "name": "Czerwiec 2027",
+      "weeks": [
+        {
+          "id": "czerwiec-2027-week-1",
+          "weekTitle": "Tydzień 22",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 04.06.2027",
+            "date": "04.06.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "czerwiec-2027-week-2",
+          "weekTitle": "Tydzień 23",
+          "monday": {
+            "title": "Poniedziałek, 07.06.2027",
+            "date": "07.06.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 11.06.2027",
+            "date": "11.06.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "czerwiec-2027-week-3",
+          "weekTitle": "Tydzień 24",
+          "monday": {
+            "title": "Poniedziałek, 14.06.2027",
+            "date": "14.06.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 18.06.2027",
+            "date": "18.06.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "czerwiec-2027-week-4",
+          "weekTitle": "Tydzień 25",
+          "monday": {
+            "title": "Poniedziałek, 21.06.2027",
+            "date": "21.06.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 25.06.2027",
+            "date": "25.06.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "czerwiec-2027-week-5",
+          "weekTitle": "Tydzień 26",
+          "monday": {
+            "title": "Poniedziałek, 28.06.2027",
+            "date": "28.06.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "lipiec-2027",
+      "name": "Lipiec 2027",
+      "weeks": [
+        {
+          "id": "lipiec-2027-week-1",
+          "weekTitle": "Tydzień 26",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 02.07.2027",
+            "date": "02.07.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "lipiec-2027-week-2",
+          "weekTitle": "Tydzień 27",
+          "monday": {
+            "title": "Poniedziałek, 05.07.2027",
+            "date": "05.07.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 09.07.2027",
+            "date": "09.07.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "lipiec-2027-week-3",
+          "weekTitle": "Tydzień 28",
+          "monday": {
+            "title": "Poniedziałek, 12.07.2027",
+            "date": "12.07.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 16.07.2027",
+            "date": "16.07.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "lipiec-2027-week-4",
+          "weekTitle": "Tydzień 29",
+          "monday": {
+            "title": "Poniedziałek, 19.07.2027",
+            "date": "19.07.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 23.07.2027",
+            "date": "23.07.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "lipiec-2027-week-5",
+          "weekTitle": "Tydzień 30",
+          "monday": {
+            "title": "Poniedziałek, 26.07.2027",
+            "date": "26.07.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 30.07.2027",
+            "date": "30.07.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "sierpien-2027",
+      "name": "Sierpień 2027",
+      "weeks": [
+        {
+          "id": "sierpien-2027-week-1",
+          "weekTitle": "Tydzień 31",
+          "monday": {
+            "title": "Poniedziałek, 02.08.2027",
+            "date": "02.08.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 06.08.2027",
+            "date": "06.08.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "sierpien-2027-week-2",
+          "weekTitle": "Tydzień 32",
+          "monday": {
+            "title": "Poniedziałek, 09.08.2027",
+            "date": "09.08.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 13.08.2027",
+            "date": "13.08.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "sierpien-2027-week-3",
+          "weekTitle": "Tydzień 33",
+          "monday": {
+            "title": "Poniedziałek, 16.08.2027",
+            "date": "16.08.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 20.08.2027",
+            "date": "20.08.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "sierpien-2027-week-4",
+          "weekTitle": "Tydzień 34",
+          "monday": {
+            "title": "Poniedziałek, 23.08.2027",
+            "date": "23.08.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 27.08.2027",
+            "date": "27.08.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "sierpien-2027-week-5",
+          "weekTitle": "Tydzień 35",
+          "monday": {
+            "title": "Poniedziałek, 30.08.2027",
+            "date": "30.08.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "wrzesien-2027",
+      "name": "Wrzesień 2027",
+      "weeks": [
+        {
+          "id": "wrzesien-2027-week-1",
+          "weekTitle": "Tydzień 35",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 03.09.2027",
+            "date": "03.09.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "wrzesien-2027-week-2",
+          "weekTitle": "Tydzień 36",
+          "monday": {
+            "title": "Poniedziałek, 06.09.2027",
+            "date": "06.09.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 10.09.2027",
+            "date": "10.09.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "wrzesien-2027-week-3",
+          "weekTitle": "Tydzień 37",
+          "monday": {
+            "title": "Poniedziałek, 13.09.2027",
+            "date": "13.09.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 17.09.2027",
+            "date": "17.09.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "wrzesien-2027-week-4",
+          "weekTitle": "Tydzień 38",
+          "monday": {
+            "title": "Poniedziałek, 20.09.2027",
+            "date": "20.09.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 24.09.2027",
+            "date": "24.09.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "wrzesien-2027-week-5",
+          "weekTitle": "Tydzień 39",
+          "monday": {
+            "title": "Poniedziałek, 27.09.2027",
+            "date": "27.09.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": null,
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    },
+    {
+      "id": "pazdziernik-2027",
+      "name": "Październik 2027",
+      "weeks": [
+        {
+          "id": "pazdziernik-2027-week-1",
+          "weekTitle": "Tydzień 39",
+          "monday": null,
+          "friday": {
+            "title": "Piątek, 01.10.2027",
+            "date": "01.10.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2027-week-2",
+          "weekTitle": "Tydzień 40",
+          "monday": {
+            "title": "Poniedziałek, 04.10.2027",
+            "date": "04.10.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 08.10.2027",
+            "date": "08.10.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2027-week-3",
+          "weekTitle": "Tydzień 41",
+          "monday": {
+            "title": "Poniedziałek, 11.10.2027",
+            "date": "11.10.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 15.10.2027",
+            "date": "15.10.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2027-week-4",
+          "weekTitle": "Tydzień 42",
+          "monday": {
+            "title": "Poniedziałek, 18.10.2027",
+            "date": "18.10.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 22.10.2027",
+            "date": "22.10.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        },
+        {
+          "id": "pazdziernik-2027-week-5",
+          "weekTitle": "Tydzień 43",
+          "monday": {
+            "title": "Poniedziałek, 25.10.2027",
+            "date": "25.10.2027",
+            "dayOfWeek": "Poniedziałek",
+            "lessons": [],
+            "total": 0
+          },
+          "friday": {
+            "title": "Piątek, 29.10.2027",
+            "date": "29.10.2027",
+            "dayOfWeek": "Piątek",
+            "lessons": [],
+            "total": 0
+          },
+          "singleDay": null
+        }
+      ],
+      "additional": [],
+      "additionalTotal": 0,
+      "regularTotal": 0,
+      "grandTotal": 0
+    }
+  ]
+}

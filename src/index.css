@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Default to dark palette variables */
+  --app-bg: #030712;
+  --card-bg: rgba(15, 23, 42, 0.75);
+  --card-border: rgba(51, 65, 85, 0.6);
+  --subcard-bg: rgba(2, 6, 23, 0.55);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --table-head-bg: rgba(15, 23, 42, 0.85);
+  --table-border: rgba(51, 65, 85, 0.5);
+  --table-row-hover: rgba(30, 41, 59, 0.4);
+  --input-bg: #1e293b;
+  --input-border: #334155;
+}
+
+html.light, .light {
+  /* High contrast, crisp iOS / macOS / Windows 11 Fluent aesthetic */
+  --app-bg: #f8fafc;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --subcard-bg: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --table-head-bg: #f1f5f9;
+  --table-border: #e2e8f0;
+  --table-row-hover: #f8fafc;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI Variable Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-app {
+  background-color: var(--app-bg);
+}
+
+.bg-card-theme {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+}
+
+.bg-subcard-theme {
+  background-color: var(--subcard-bg);
+  border-color: var(--card-border);
+}
+
+.text-main {
+  color: var(--text-main);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.input-theme {
+  background-color: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-main);
+}
+
+/* iOS & Windows 11 Acrylic blur helper */
+.ios-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.dark .ios-glass {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+}
+
+@layer utilities {
+  /* Print formatting */
+  @media print {
+    body {
+      background-color: white !important;
+      color: black !important;
+    }
+    .no-print {
+      display: none !important;
+    }
+    .print-only {
+      display: block !important;
+    }
+    .page-break {
+      page-break-after: always;
+    }
+    .print-card {
+      border: 1px solid #ccc !important;
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+/* Custom soft scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}

@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "JournalDocument": {
+      "title": "JournalDocument",
+      "description": "Complete journal data including school info, templates, settings, and months",
+      "type": "object",
+      "properties": {
+        "schoolInfo": {
+          "type": "object",
+          "description": "School information and pricing rules"
+        },
+        "defaultTemplates": {
+          "type": "object",
+          "description": "Default student schedules for Monday and Friday"
+        },
+        "settings": {
+          "type": "object",
+          "description": "Journal settings and last modified timestamp"
+        },
+        "months": {
+          "type": "array",
+          "description": "List of monthly lesson records and calculations"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of the last modification"
+        }
+      },
+      "required": ["months", "settings"]
+    }
+  },
+  "firestore": {
+    "/journal/{docId}": {
+      "schema": "JournalDocument",
+      "description": "Central journal database document holding lesson logs and summaries"
+    }
+  }
+}
