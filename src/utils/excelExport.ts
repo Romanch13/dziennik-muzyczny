@@ -146,7 +146,9 @@ export async function exportMonthToExcel(
   ws.getCell(curRow, 1).alignment = { vertical: 'middle', horizontal: 'center' };
   
   ws.mergeCells(curRow, 2, curRow, 15);
-  ws.getCell(curRow, 2).value = '30 min = 40 zł  |  45 min = 60 zł  |  60 min = 70 zł';
+  ws.getCell(curRow, 2).value = workspace === 'private'
+    ? 'Lekcje prywatne — elastyczny grafik i indywidualne stawки'
+    : '30 min = 40 zł  |  45 min = 60 zł  |  60 min = 70 zł';
   ws.getCell(curRow, 2).font = { name: 'Calibri', size: 9.5 };
   ws.getCell(curRow, 2).alignment = { vertical: 'middle', horizontal: 'left' };
   ws.getRow(curRow).height = 18;
@@ -158,8 +160,9 @@ export async function exportMonthToExcel(
   ws.getCell(curRow, 1).alignment = { vertical: 'middle', horizontal: 'center' };
 
   ws.mergeCells(curRow, 2, curRow, 15);
-  ws.getCell(curRow, 2).value =
-    'Poniedziałek / Piątek tego samego tygodnia obok siebie. Jeśli w tygodniu tylko jeden dzień — osobno. Jeśli «Nie był» — wiersz przekreślony i nie liczy się do sumy. Kolumna «Nie było, ale liczę»: wybierz Liczę, aby doliczyć mimo nieobecności.';
+  ws.getCell(curRow, 2).value = workspace === 'private'
+    ? 'Dni od poniedziałku do soboty. Jeśli «Nie był» — wiersz przekreślony i nie liczy się do sumy. Kolumna «Nie było, ale liczę»: wybierz Liczę, aby doliczyć mimo nieobecności.'
+    : 'Poniedziałek / Piątek tego самого tygodnia obok siebie. Jeśli w tygodniu tylko jeden dzień — osobno. Jeśli «Nie był» — wiersz przekreślony i nie liczy się do sumy. Kolumna «Nie było, ale liczę»: wybierz Liczę, aby doliczyć mimo nieobecności.';
   ws.getCell(curRow, 2).font = { name: 'Calibri', size: 8.5, color: { argb: 'FF333333' } };
   ws.getCell(curRow, 2).alignment = { vertical: 'middle', horizontal: 'left' };
   ws.getRow(curRow).height = 18;
@@ -482,170 +485,194 @@ export async function exportMonthToExcel(
     curRow++;
   }
 
-  // --- 5. DODATKOWO SECTION ---
-  ws.mergeCells(curRow, 1, curRow, 7);
-  formatRange(1, curRow, 7, curRow, {
-    fill: C_PURPLE_HEADER,
-    border: thinBorder,
-    font: { name: 'Calibri', size: 9.5, bold: true, color: { argb: 'FFFFFFFF' } },
-    alignment: { vertical: 'middle', horizontal: 'left', indent: 1 }
-  });
-  ws.getCell(curRow, 1).value = 'DODATKOWO (dowolny dzień pn-sb + data)';
-  ws.getRow(curRow).height = 19;
-  curRow++;
-
-  // DODATKOWO subheaders
-  const extraHeaders = ['Dzień', 'Data', 'Imię', 'Czas', 'Cena', 'Był/Nie był', 'Suma'];
-  for (let i = 0; i < extraHeaders.length; i++) {
-    const c = ws.getCell(curRow, i + 1);
-    setCell(c, extraHeaders[i], {
-      font: { name: 'Calibri', size: 9, bold: true, color: { argb: 'FF4A148C' } },
-      fill: C_PURPLE_SUBHEAD,
-      alignment: { vertical: 'middle', horizontal: 'center' },
+  // --- 5. DODATKOWO SECTION (Only for Jagodno workspace) ---
+  if (workspace !== 'private') {
+    ws.mergeCells(curRow, 1, curRow, 7);
+    formatRange(1, curRow, 7, curRow, {
+      fill: C_PURPLE_HEADER,
       border: thinBorder,
+      font: { name: 'Calibri', size: 9.5, bold: true, color: { argb: 'FFFFFFFF' } },
+      alignment: { vertical: 'middle', horizontal: 'left', indent: 1 }
     });
-  }
-  ws.getRow(curRow).height = 18;
-  curRow++;
+    ws.getCell(curRow, 1).value = 'DODATKOWO (dowolny dzień pn-sb + data)';
+    ws.getRow(curRow).height = 19;
+    curRow++;
 
-  const extraLessons = month.additional || [];
-  const extraRowsCount = Math.max(extraLessons.length, 10);
-
-  for (let r = 0; r < extraRowsCount; r++) {
+    // DODATKOWO subheaders
+    const extraHeaders = ['Dzień', 'Data', 'Imię', 'Czas', 'Cena', 'Był/Nie był', 'Suma'];
+    for (let i = 0; i < extraHeaders.length; i++) {
+      const c = ws.getCell(curRow, i + 1);
+      setCell(c, extraHeaders[i], {
+        font: { name: 'Calibri', size: 9, bold: true, color: { argb: 'FF4A148C' } },
+        fill: C_PURPLE_SUBHEAD,
+        alignment: { vertical: 'middle', horizontal: 'center' },
+        border: thinBorder,
+      });
+    }
     ws.getRow(curRow).height = 18;
-    const l = r < extraLessons.length ? extraLessons[r] : null;
-    const isAbsent = l ? l.status === 'Nie był' : false;
+    curRow++;
 
-    const rowFont: Partial<ExcelJS.Font> = {
-      name: 'Calibri',
-      size: 9,
-      strike: isAbsent,
-      color: isAbsent ? { argb: 'FFC00000' } : undefined,
-    };
+    const extraLessons = month.additional || [];
+    const extraRowsCount = Math.max(extraLessons.length, 10);
 
-    // Col 1: Dzień
-    setCell(ws.getCell(curRow, 1), l ? l.day : '', {
-      font: rowFont,
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'center' },
+    for (let r = 0; r < extraRowsCount; r++) {
+      ws.getRow(curRow).height = 18;
+      const l = r < extraLessons.length ? extraLessons[r] : null;
+      const isAbsent = l ? l.status === 'Nie był' : false;
+
+      const rowFont: Partial<ExcelJS.Font> = {
+        name: 'Calibri',
+        size: 9,
+        strike: isAbsent,
+        color: isAbsent ? { argb: 'FFC00000' } : undefined,
+      };
+
+      // Col 1: Dzień
+      setCell(ws.getCell(curRow, 1), l ? l.day : '', {
+        font: rowFont,
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'center' },
+        border: thinBorder,
+      });
+
+      // Col 2: Data
+      setCell(ws.getCell(curRow, 2), l ? l.date : '', {
+        font: rowFont,
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'center' },
+        border: thinBorder,
+      });
+
+      // Col 3: Imię
+      setCell(ws.getCell(curRow, 3), l ? l.student : '', {
+        font: { ...rowFont, bold: Boolean(l) },
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'left', indent: 1 },
+        border: thinBorder,
+      });
+
+      // Col 4: Czas
+      setCell(ws.getCell(curRow, 4), l ? l.duration : '', {
+        font: rowFont,
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'center' },
+        border: thinBorder,
+      });
+
+      // Col 5: Cena
+      setCell(ws.getCell(curRow, 5), l ? l.price : '', {
+        font: rowFont,
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'right' },
+        border: thinBorder,
+      });
+
+      // Col 6: Był/Nie był
+      setCell(ws.getCell(curRow, 6), l ? (l.status || 'Był') : '', {
+        font: rowFont,
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'center' },
+        border: thinBorder,
+      });
+
+      // Col 7: Suma
+      setCell(ws.getCell(curRow, 7), l ? l.sum : 0, {
+        font: { ...rowFont, bold: Boolean(l && l.sum > 0) },
+        fill: C_DATA_CREAM,
+        alignment: { vertical: 'middle', horizontal: 'right' },
+        border: thinBorder,
+      });
+
+      curRow++;
+    }
+
+    // DODATKOWO summary
+    ws.mergeCells(curRow, 1, curRow, 6);
+    formatRange(1, curRow, 6, curRow, {
+      fill: C_SUMMARY_GREEN,
       border: thinBorder,
+      font: { name: 'Calibri', size: 9.5, bold: true, color: { argb: 'FF000000' } },
+      alignment: { vertical: 'middle', horizontal: 'right' }
     });
+    ws.getCell(curRow, 1).value = 'Podsumowanie Dodatkowo:';
 
-    // Col 2: Data
-    setCell(ws.getCell(curRow, 2), l ? l.date : '', {
-      font: rowFont,
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'center' },
-      border: thinBorder,
-    });
-
-    // Col 3: Imię
-    setCell(ws.getCell(curRow, 3), l ? l.student : '', {
-      font: { ...rowFont, bold: Boolean(l) },
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'left', indent: 1 },
-      border: thinBorder,
-    });
-
-    // Col 4: Czas
-    setCell(ws.getCell(curRow, 4), l ? l.duration : '', {
-      font: rowFont,
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'center' },
-      border: thinBorder,
-    });
-
-    // Col 5: Cena
-    setCell(ws.getCell(curRow, 5), l ? l.price : '', {
-      font: rowFont,
-      fill: C_DATA_CREAM,
+    setCell(ws.getCell(curRow, 7), month.additionalTotal, {
+      font: { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF000000' } },
+      fill: C_SUMMARY_GREEN,
       alignment: { vertical: 'middle', horizontal: 'right' },
       border: thinBorder,
     });
+    ws.getRow(curRow).height = 20;
+    curRow++;
 
-    // Col 6: Był/Nie był
-    setCell(ws.getCell(curRow, 6), l ? (l.status || 'Był') : '', {
-      font: rowFont,
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'center' },
-      border: thinBorder,
-    });
-
-    // Col 7: Suma
-    setCell(ws.getCell(curRow, 7), l ? l.sum : 0, {
-      font: { ...rowFont, bold: Boolean(l && l.sum > 0) },
-      fill: C_DATA_CREAM,
-      alignment: { vertical: 'middle', horizontal: 'right' },
-      border: thinBorder,
-    });
-
+    // Spacer
+    ws.getRow(curRow).height = 10;
     curRow++;
   }
 
-  // DODATKOWO summary
-  ws.mergeCells(curRow, 1, curRow, 6);
-  formatRange(1, curRow, 6, curRow, {
-    fill: C_SUMMARY_GREEN,
-    border: thinBorder,
-    font: { name: 'Calibri', size: 9.5, bold: true, color: { argb: 'FF000000' } },
-    alignment: { vertical: 'middle', horizontal: 'right' }
-  });
-  ws.getCell(curRow, 1).value = 'Podsumowanie Dodatkowo:';
+  // --- 6. GRAND TOTALS BOXES ---
+  if (workspace === 'private') {
+    // Single prominent box for Private Work (Pn–Sb)
+    ws.mergeCells(curRow, 1, curRow, 5);
+    formatRange(1, curRow, 5, curRow, {
+      fill: C_PURPLE_HEADER,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 11, bold: true, color: { argb: 'FFFFFFFF' } },
+      alignment: { vertical: 'middle', horizontal: 'right' }
+    });
+    ws.getCell(curRow, 1).value = 'SUMA ZA MIESIĄC (od pon do sob):';
 
-  setCell(ws.getCell(curRow, 7), month.additionalTotal, {
-    font: { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF000000' } },
-    fill: C_SUMMARY_GREEN,
-    alignment: { vertical: 'middle', horizontal: 'right' },
-    border: thinBorder,
-  });
-  ws.getRow(curRow).height = 20;
-  curRow++;
+    ws.mergeCells(curRow, 6, curRow, 7);
+    formatRange(6, curRow, 7, curRow, {
+      fill: C_PURPLE_HEADER,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 12, bold: true, color: { argb: 'FFFFFFFF' } },
+      alignment: { vertical: 'middle', horizontal: 'center' }
+    });
+    ws.getCell(curRow, 6).value = `${month.regularTotal.toLocaleString('pl-PL')} zł`;
+    ws.getRow(curRow).height = 24;
+  } else {
+    // Box 1: Regular Month Total (Pon + Pt)
+    ws.mergeCells(curRow, 1, curRow, 5);
+    formatRange(1, curRow, 5, curRow, {
+      fill: C_YELLOW_BOX,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 11, bold: true, color: { argb: 'FF000000' } },
+      alignment: { vertical: 'middle', horizontal: 'right' }
+    });
+    ws.getCell(curRow, 1).value = 'SUMA ZA MIESIĄC (pon + pt):';
 
-  // Spacer
-  ws.getRow(curRow).height = 10;
-  curRow++;
+    ws.mergeCells(curRow, 6, curRow, 7);
+    formatRange(6, curRow, 7, curRow, {
+      fill: C_YELLOW_BOX,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 12, bold: true, color: { argb: 'FF000000' } },
+      alignment: { vertical: 'middle', horizontal: 'center' }
+    });
+    ws.getCell(curRow, 6).value = `${month.regularTotal.toLocaleString('pl-PL')} zł`;
+    ws.getRow(curRow).height = 22;
+    curRow++;
 
-  // --- 6. GRAND TOTALS BOXES (Yellow & Orange) ---
-  // Box 1: Regular Month Total (Pon + Pt)
-  ws.mergeCells(curRow, 1, curRow, 5);
-  formatRange(1, curRow, 5, curRow, {
-    fill: C_YELLOW_BOX,
-    border: mediumBorder,
-    font: { name: 'Calibri', size: 11, bold: true, color: { argb: 'FF000000' } },
-    alignment: { vertical: 'middle', horizontal: 'right' }
-  });
-  ws.getCell(curRow, 1).value = 'SUMA ZA MIESIĄC (pon + pt):';
+    // Box 2: Total Month (Regular + Additional)
+    ws.mergeCells(curRow, 1, curRow, 5);
+    formatRange(1, curRow, 5, curRow, {
+      fill: C_ORANGE_BOX,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 11, bold: true, color: { argb: 'FFFFFFFF' } },
+      alignment: { vertical: 'middle', horizontal: 'right' }
+    });
+    ws.getCell(curRow, 1).value = 'SUMA CAŁKOWITA (miesiąc + Dodatkowo):';
 
-  ws.mergeCells(curRow, 6, curRow, 7);
-  formatRange(6, curRow, 7, curRow, {
-    fill: C_YELLOW_BOX,
-    border: mediumBorder,
-    font: { name: 'Calibri', size: 12, bold: true, color: { argb: 'FF000000' } },
-    alignment: { vertical: 'middle', horizontal: 'center' }
-  });
-  ws.getCell(curRow, 6).value = `${month.regularTotal.toLocaleString('pl-PL')} zł`;
-  ws.getRow(curRow).height = 22;
-  curRow++;
-
-  // Box 2: Total Month (Regular + Additional)
-  ws.mergeCells(curRow, 1, curRow, 5);
-  formatRange(1, curRow, 5, curRow, {
-    fill: C_ORANGE_BOX,
-    border: mediumBorder,
-    font: { name: 'Calibri', size: 11, bold: true, color: { argb: 'FFFFFFFF' } },
-    alignment: { vertical: 'middle', horizontal: 'right' }
-  });
-  ws.getCell(curRow, 1).value = 'SUMA CAŁKOWITA (miesiąc + Dodatkowo):';
-
-  ws.mergeCells(curRow, 6, curRow, 7);
-  formatRange(6, curRow, 7, curRow, {
-    fill: C_ORANGE_BOX,
-    border: mediumBorder,
-    font: { name: 'Calibri', size: 12, bold: true, color: { argb: 'FFFFFFFF' } },
-    alignment: { vertical: 'middle', horizontal: 'center' }
-  });
-  ws.getCell(curRow, 6).value = `${month.grandTotal.toLocaleString('pl-PL')} zł`;
-  ws.getRow(curRow).height = 24;
+    ws.mergeCells(curRow, 6, curRow, 7);
+    formatRange(6, curRow, 7, curRow, {
+      fill: C_ORANGE_BOX,
+      border: mediumBorder,
+      font: { name: 'Calibri', size: 12, bold: true, color: { argb: 'FFFFFFFF' } },
+      alignment: { vertical: 'middle', horizontal: 'center' }
+    });
+    ws.getCell(curRow, 6).value = `${month.grandTotal.toLocaleString('pl-PL')} zł`;
+    ws.getRow(curRow).height = 24;
+  }
 
   // --- 7. EXPORT WORKBOOK FILE IN BROWSER ---
   const buffer = await workbook.xlsx.writeBuffer();

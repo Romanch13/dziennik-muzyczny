@@ -21,6 +21,7 @@ interface MonthNavigationProps {
   onOpenAddMonth: () => void;
   isAuthenticated: boolean;
   onDeleteMonth?: (id: string, name: string) => void;
+  workspace?: 'jagodno' | 'private';
 }
 
 export const MonthNavigation: React.FC<MonthNavigationProps> = ({
@@ -31,7 +32,9 @@ export const MonthNavigation: React.FC<MonthNavigationProps> = ({
   onOpenAddMonth,
   isAuthenticated,
   onDeleteMonth,
+  workspace = 'jagodno',
 }) => {
+  const isPrivate = workspace === 'private';
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -79,7 +82,7 @@ export const MonthNavigation: React.FC<MonthNavigationProps> = ({
 
   if (activeMonth) {
     for (const week of activeMonth.weeks || []) {
-      const days = [week.monday, week.friday, week.singleDay].filter(Boolean);
+      const days = [week.monday, week.friday, week.singleDay, ...(week.days || [])].filter(Boolean);
       for (const d of days) {
         if (!d) continue;
         for (const l of d.lessons || []) {
@@ -92,11 +95,13 @@ export const MonthNavigation: React.FC<MonthNavigationProps> = ({
       }
     }
 
-    for (const add of activeMonth.additional || []) {
-      if (!add.student) continue;
-      totalLessons++;
-      uniqueStudents.add(add.student);
-      if (add.status === 'Był') attendedLessons++;
+    if (!isPrivate) {
+      for (const add of activeMonth.additional || []) {
+        if (!add.student) continue;
+        totalLessons++;
+        uniqueStudents.add(add.student);
+        if (add.status === 'Był') attendedLessons++;
+      }
     }
   }
 
@@ -214,44 +219,50 @@ export const MonthNavigation: React.FC<MonthNavigationProps> = ({
 
       {/* KPI Cards Ribbon (iOS & Windows 11 Fluent style) */}
       {activeMonth && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className={`grid grid-cols-2 sm:grid-cols-3 ${isPrivate ? 'lg:grid-cols-5' : 'lg:grid-cols-6'} gap-3`}>
           {/* Grand Total */}
           <div className="bg-gradient-to-br from-indigo-50/90 to-white dark:from-indigo-950/40 dark:to-slate-900/80 border border-indigo-200/80 dark:border-indigo-500/30 rounded-2xl p-4 shadow-sm backdrop-blur-md">
             <div className="flex items-center justify-between text-indigo-700 dark:text-indigo-300 text-xs mb-1.5">
-              <span className="font-bold">Suma całkowita</span>
+              <span className="font-bold">{isPrivate ? 'Suma miesiąca' : 'Suma całkowita'}</span>
               <DollarSign className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             </div>
             <div className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-              {activeMonth.grandTotal.toLocaleString('pl-PL')} <span className="text-xs font-normal text-indigo-600 dark:text-indigo-300">zł</span>
+              {(isPrivate ? activeMonth.regularTotal : activeMonth.grandTotal).toLocaleString('pl-PL')} <span className="text-xs font-normal text-indigo-600 dark:text-indigo-300">zł</span>
             </div>
-            <p className="text-[10px] text-indigo-900/70 dark:text-slate-400 mt-1 font-medium">Miesiąc + Dodatkowo</p>
+            <p className="text-[10px] text-indigo-900/70 dark:text-slate-400 mt-1 font-medium">
+              {isPrivate ? 'Cały miesiąc (od pon do sob)' : 'Miesiąc + Dodatkowo'}
+            </p>
           </div>
 
-          {/* Regular Lessons Total */}
+          {/* Regular Lessons Total (z Poniedziałku do Soboty) */}
           <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm backdrop-blur-md">
             <div className="flex items-center justify-between text-sky-800 dark:text-sky-300 text-xs mb-1.5">
-              <span className="font-bold">Poniedziałki + Piątki</span>
+              <span className="font-bold">{isPrivate ? 'z Poniedziałku do Soboty' : 'Poniedziałki + Piątki'}</span>
               <Calendar className="w-4 h-4 text-sky-600 dark:text-sky-400" />
             </div>
             <div className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               {activeMonth.regularTotal.toLocaleString('pl-PL')} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">zł</span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Stały grafik</p>
-          </div>
-
-          {/* Additional Lessons Total */}
-          <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm backdrop-blur-md">
-            <div className="flex items-center justify-between text-emerald-800 dark:text-emerald-300 text-xs mb-1.5">
-              <span className="font-bold">Zajęcia Dodatkowo</span>
-              <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
-              {activeMonth.additionalTotal.toLocaleString('pl-PL')} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">zł</span>
-            </div>
             <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-medium">
-              {activeMonth.additional?.length || 0} wpisów dodatkowych
+              {isPrivate ? 'Lekcje prywatne (Pn–Sb)' : 'Stały grafik'}
             </p>
           </div>
+
+          {/* Additional Lessons Total (Hidden in private workspace!) */}
+          {!isPrivate && (
+            <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm backdrop-blur-md">
+              <div className="flex items-center justify-between text-emerald-800 dark:text-emerald-300 text-xs mb-1.5">
+                <span className="font-bold">Zajęcia Dodatkowo</span>
+                <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">
+                {activeMonth.additionalTotal.toLocaleString('pl-PL')} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">zł</span>
+              </div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                {activeMonth.additional?.length || 0} wpisów dodatkowych
+              </p>
+            </div>
+          )}
 
           {/* Attendance Rate */}
           <div className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm backdrop-blur-md">

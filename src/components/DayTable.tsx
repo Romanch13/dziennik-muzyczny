@@ -315,11 +315,7 @@ export const DayTable: React.FC<DayTableProps> = ({
                             value={lesson.duration}
                             onChange={(e) => {
                               const newDur = e.target.value;
-                              let newPrice = lesson.price;
-                              if (newDur.includes('30')) newPrice = 40;
-                              else if (newDur.includes('45')) newPrice = 60;
-                              else if (newDur.includes('60')) newPrice = 70;
-                              onUpdateLesson(lesson.id, { duration: newDur, price: newPrice });
+                              onUpdateLesson(lesson.id, { duration: newDur });
                             }}
                             className="w-full min-w-[86px] bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-lg pl-2 pr-5 py-1 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer shadow-xs whitespace-nowrap"
                           >

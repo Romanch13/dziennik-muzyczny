@@ -93,17 +93,25 @@ export function exportMonthToPdf(
   const cardWidth = (contentWidth - cardGap) / 2;
   const cardHeight = 20;
 
-  // Card 1: Suma całkowita (All regular + additional)
+  // Card 1: Suma całkowita
   doc.setFillColor(238, 242, 255); // Indigo-50
   doc.setDrawColor(199, 210, 254);
   doc.roundedRect(margin, currentY, cardWidth, cardHeight, 2, 2, 'FD');
   doc.setFontSize(8);
-  doc.setTextColor(79, 70, 229);
+  doc.setTextColor(isPrivate ? 147 : 79, isPrivate ? 51 : 70, isPrivate ? 234 : 229);
   doc.setFont('LiberationSans', 'bold');
-  doc.text('SUMA CAŁKOWITA (MIESIĄC + DODATKOWO)', margin + 5, currentY + 6);
+  doc.text(
+    isPrivate ? 'SUMA ZA MIESIĄC (OD PON DO SOB)' : 'SUMA CAŁKOWITA (MIESIĄC + DODATKOWO)',
+    margin + 5,
+    currentY + 6
+  );
   doc.setFontSize(14);
   doc.setTextColor(15, 23, 42);
-  doc.text(`${month.grandTotal.toLocaleString('pl-PL')} zł`, margin + 5, currentY + 15);
+  doc.text(
+    `${(isPrivate ? month.regularTotal : month.grandTotal).toLocaleString('pl-PL')} zł`,
+    margin + 5,
+    currentY + 15
+  );
 
   // Card 2: Grafik regularny
   doc.setFillColor(248, 250, 252); // Slate-50
@@ -113,7 +121,7 @@ export function exportMonthToPdf(
   doc.setTextColor(71, 85, 105);
   doc.setFont('LiberationSans', 'bold');
   doc.text(
-    isPrivate ? 'GRAFIK REGULARNY (LEKCJE PRYWATNE)' : 'GRAFIK REGULARNY (PONIEDZIAŁKI + PIĄTKI)',
+    isPrivate ? 'Z PONIEDZIAŁKU DO SOBOTY' : 'GRAFIK REGULARNY (PONIEDZIAŁKI + PIĄTKI)',
     margin + cardWidth + cardGap + 5,
     currentY + 6
   );
@@ -237,8 +245,8 @@ export function exportMonthToPdf(
     }
   }
 
-  // --- 4. DODATKOWO SECTION ---
-  if (month.additional && month.additional.length > 0) {
+  // --- 4. DODATKOWO SECTION (Only for Jagodno school workspace) ---
+  if (!isPrivate && month.additional && month.additional.length > 0) {
     if (currentY > pageHeight - 55) {
       doc.addPage();
       currentY = 18;
@@ -309,16 +317,30 @@ export function exportMonthToPdf(
     currentY = 20;
   }
 
-  doc.setFillColor(241, 245, 249);
-  doc.setDrawColor(203, 213, 225);
-  doc.roundedRect(margin, currentY, contentWidth, 14, 2, 2, 'FD');
-  doc.setFontSize(8.5);
-  doc.setFont('LiberationSans', 'bold');
-  doc.setTextColor(15, 23, 42);
-  doc.text(`Grafik (pon + pt): ${month.regularTotal.toLocaleString('pl-PL')} zł`, margin + 6, currentY + 8.5);
-  doc.text(`Dodatkowo: ${month.additionalTotal.toLocaleString('pl-PL')} zł`, margin + 65, currentY + 8.5);
-  doc.setTextColor(79, 70, 229);
-  doc.text(`ŁĄCZNA SUMA: ${month.grandTotal.toLocaleString('pl-PL')} zł`, pageWidth - margin - 65, currentY + 8.5);
+  if (isPrivate) {
+    doc.setFillColor(250, 245, 255); // Purple-50
+    doc.setDrawColor(216, 180, 254); // Purple-300
+    doc.roundedRect(margin, currentY, contentWidth, 14, 2, 2, 'FD');
+    doc.setFontSize(10);
+    doc.setFont('LiberationSans', 'bold');
+    doc.setTextColor(126, 34, 206); // Purple-700
+    doc.text(
+      `SUMA ZA MIESIĄC (od pon do sob):  ${month.regularTotal.toLocaleString('pl-PL')} zł`,
+      margin + 8,
+      currentY + 9
+    );
+  } else {
+    doc.setFillColor(241, 245, 249);
+    doc.setDrawColor(203, 213, 225);
+    doc.roundedRect(margin, currentY, contentWidth, 14, 2, 2, 'FD');
+    doc.setFontSize(8.5);
+    doc.setFont('LiberationSans', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text(`Grafik (pon + pt): ${month.regularTotal.toLocaleString('pl-PL')} zł`, margin + 6, currentY + 8.5);
+    doc.text(`Dodatkowo: ${month.additionalTotal.toLocaleString('pl-PL')} zł`, margin + 65, currentY + 8.5);
+    doc.setTextColor(79, 70, 229);
+    doc.text(`ŁĄCZNA SUMA: ${month.grandTotal.toLocaleString('pl-PL')} zł`, pageWidth - margin - 65, currentY + 8.5);
+  }
 
   currentY += 22;
 

@@ -38,7 +38,8 @@ import {
   PlusCircle,
   X,
   User,
-  Building2
+  Building2,
+  DollarSign
 } from 'lucide-react';
 import initialDatabaseJson from './data/initialData.json';
 import { 
@@ -1208,6 +1209,7 @@ export default function App() {
           }}
           isAuthenticated={isAuthenticated}
           onDeleteMonth={handleDeleteMonthClick}
+          workspace={activeWorkspace}
         />
 
         {activeMonth ? (
@@ -1261,24 +1263,50 @@ export default function App() {
               ))}
             </div>
 
-            {/* DODATKOWO Section */}
-            <AdditionalLessonsSection
-              lessons={activeMonth.additional || []}
-              total={activeMonth.additionalTotal}
-              regularTotal={activeMonth.regularTotal}
-              grandTotal={activeMonth.grandTotal}
-              isAuthenticated={isAuthenticated}
-              onUpdateLesson={handleUpdateExtraLesson}
-              onDeleteLesson={handleDeleteExtraLesson}
-              onOpenAddLesson={() => {
-                if (!isAuthenticated) {
-                  setIsLoginOpen(true);
-                } else {
-                  setIsAddExtraOpen(true);
-                }
-              }}
-              searchFilter={searchQuery}
-            />
+            {/* Private Workspace: Prominent Month Summary Banner */}
+            {activeWorkspace === 'private' && (
+              <div className="bg-card-theme border rounded-3xl p-5 sm:p-6 shadow-sm transition-colors flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="p-3.5 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                    <DollarSign className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-muted">
+                      Rozliczenie miesiąca • Lekcje prywatne
+                    </span>
+                    <h3 className="text-base sm:text-lg font-bold text-main">
+                      SUMA ZA MIESIĄC (od pon do sob):
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40 border border-purple-300 dark:border-purple-800 px-5 py-2.5 rounded-2xl shadow-xs">
+                    {activeMonth.regularTotal.toLocaleString('pl-PL')} zł
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* DODATKOWO Section (Only in Jagodno school workspace) */}
+            {activeWorkspace === 'jagodno' && (
+              <AdditionalLessonsSection
+                lessons={activeMonth.additional || []}
+                total={activeMonth.additionalTotal}
+                regularTotal={activeMonth.regularTotal}
+                grandTotal={activeMonth.grandTotal}
+                isAuthenticated={isAuthenticated}
+                onUpdateLesson={handleUpdateExtraLesson}
+                onDeleteLesson={handleDeleteExtraLesson}
+                onOpenAddLesson={() => {
+                  if (!isAuthenticated) {
+                    setIsLoginOpen(true);
+                  } else {
+                    setIsAddExtraOpen(true);
+                  }
+                }}
+                searchFilter={searchQuery}
+              />
+            )}
           </>
         ) : (
           <div className="ios-glass rounded-3xl p-10 text-center max-w-lg mx-auto space-y-4 my-8">
